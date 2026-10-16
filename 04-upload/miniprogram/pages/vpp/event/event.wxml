@@ -1,0 +1,105 @@
+<view class="container">
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading && activity}}">
+    <!-- 活动头部 -->
+    <view class="event-hero">
+      <view class="event-status-badge {{activity.status}}">
+        {{statusLabels[activity.status] || activity.status}}
+      </view>
+      <text class="event-name">{{activity.title}}</text>
+      <text class="event-desc">{{activity.description || '参与虚拟电厂需求响应活动，获取补贴收益'}}</text>
+    </view>
+
+    <!-- 关键信息 -->
+    <view class="info-card">
+      <view class="info-row">
+        <text class="info-label">活动类型</text>
+        <text class="info-value">{{activity.typeName || activity.type}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">开始时间</text>
+        <text class="info-value">{{activity.startAtText}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">结束时间</text>
+        <text class="info-value">{{activity.endAtText}}</text>
+      </view>
+      <view class="info-row" wx:if="{{activity.totalCapacity}}">
+        <text class="info-label">需求容量</text>
+        <text class="info-value">{{activity.totalCapacity}} kW</text>
+      </view>
+      <view class="info-row" wx:if="{{activity.minDuration}}">
+        <text class="info-label">最短响应时长</text>
+        <text class="info-value">{{activity.minDuration}} 分钟</text>
+      </view>
+      <view class="info-row" wx:if="{{activity.capacityPrice !== undefined}}">
+        <text class="info-label">容量补贴</text>
+        <text class="info-value highlight">¥{{activity.capacityPrice}} / kW</text>
+      </view>
+      <view class="info-row" wx:if="{{activity.energyPrice !== undefined}}">
+        <text class="info-label">电量补贴</text>
+        <text class="info-value highlight">¥{{activity.energyPrice}} / kWh</text>
+      </view>
+      <view class="info-row" wx:if="{{activity.minimumCapacity !== undefined}}">
+        <text class="info-label">最低承诺容量</text>
+        <text class="info-value">{{activity.minimumCapacity}} kW</text>
+      </view>
+      <view class="info-row" wx:if="{{activity.enrolledCount !== undefined}}">
+        <text class="info-label">已报名</text>
+        <text class="info-value">{{activity.enrolledCount}} 家（{{activity.fillRate}}%）</text>
+      </view>
+    </view>
+
+    <!-- 预计收益 -->
+    <view class="earnings-card" wx:if="{{activity.capacityPrice !== undefined}}">
+      <view class="card-title">预计收益（单次响应）</view>
+      <view class="earnings-row">
+        <view class="earnings-item">
+          <text class="earnings-label">按100kW参与</text>
+          <text class="earnings-value">¥{{earningsEstimate[0]}}</text>
+        </view>
+        <view class="earnings-item">
+          <text class="earnings-label">按500kW参与</text>
+          <text class="earnings-value">¥{{earningsEstimate[1]}}</text>
+        </view>
+        <view class="earnings-item">
+          <text class="earnings-label">按1000kW参与</text>
+          <text class="earnings-value">¥{{earningsEstimate[2]}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 资源选择（报名时） -->
+    <view class="info-card" wx:if="{{!enrolled && myResources.length > 0}}">
+      <view class="card-title">选择参与资源</view>
+      <picker range="{{resourceNames}}" value="{{resourceIndex}}" bindchange="onResourceChange">
+        <view class="info-row">
+          <text class="info-label">可调负荷</text>
+          <text class="info-value">{{resourceNames[resourceIndex]}}</text>
+        </view>
+      </picker>
+      <view class="info-row">
+        <text class="info-label">承诺容量</text>
+        <text class="info-value highlight">{{committedCapacity}} kW</text>
+      </view>
+    </view>
+    <view class="info-card" wx:if="{{!enrolled && myResources.length === 0 && activity.canEnroll !== false}}">
+      <view class="empty-tip">暂无在线可调负荷资源，请先在VPP页注册资源并上线</view>
+    </view>
+
+    <!-- 底部操作栏 -->
+    <view class="bottom-bar">
+      <view class="enrolled-badge" wx:if="{{enrolled}}">
+        <text>✓ 已报名</text>
+      </view>
+      <button class="enroll-btn {{enrolled ? 'cancel' : ''}}"
+              bindtap="onEnroll"
+              disabled="{{activity.status === 'completed' || activity.status === 'cancelled' || activity.status === 'executing' || enrolling}}">
+        {{enrolling ? '处理中...' : enrolled ? '取消报名' : '立即报名'}}
+      </button>
+    </view>
+  </block>
+</view>

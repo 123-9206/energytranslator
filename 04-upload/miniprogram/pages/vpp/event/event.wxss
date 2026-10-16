@@ -1,0 +1,190 @@
+.container {
+  padding: 0 0 160rpx 0;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.loading-tip {
+  text-align: center;
+  padding: 200rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.event-hero {
+  background: linear-gradient(135deg, #07C160 0%, #05a34e 100%);
+  padding: 48rpx 32rpx 40rpx;
+}
+
+.event-status-badge {
+  display: inline-block;
+  font-size: 22rpx;
+  padding: 6rpx 20rpx;
+  border-radius: 8rpx;
+  margin-bottom: 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.event-status-badge.upcoming {
+  background: rgba(0, 122, 255, 0.3);
+}
+
+.event-status-badge.ended {
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.event-name {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16rpx;
+}
+
+.event-desc {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+.info-card {
+  margin: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 8rpx 32rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.info-value.highlight {
+  color: #fa5151;
+  font-weight: 700;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+}
+
+.earnings-card {
+  margin: 0 24rpx 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.earnings-row {
+  display: flex;
+  gap: 16rpx;
+}
+
+.earnings-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 8rpx;
+  background: #f8fff8;
+  border-radius: 12rpx;
+}
+
+.earnings-label {
+  font-size: 22rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.earnings-value {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #07C160;
+}
+
+.detail-card {
+  margin: 0 24rpx 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.detail-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.8;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 32rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  gap: 24rpx;
+}
+
+.enrolled-badge {
+  padding: 16rpx 32rpx;
+  background: rgba(7, 193, 96, 0.12);
+  color: #07C160;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.enroll-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #07C160;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 16rpx;
+  border: none;
+}
+
+.enroll-btn.cancel {
+  background: #fff;
+  color: #fa5151;
+  border: 2rpx solid #fa5151;
+}
+
+.enroll-btn[disabled] {
+  background: #ccc;
+  color: #fff;
+}
+
+.enroll-btn::after {
+  border: none;
+}

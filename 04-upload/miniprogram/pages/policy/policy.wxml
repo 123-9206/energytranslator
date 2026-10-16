@@ -1,0 +1,65 @@
+<view class="container">
+  <!-- 政策汇总 -->
+  <view class="summary-section">
+    <view class="summary-title">🎯 政策福利中心</view>
+    <view class="summary-row">
+      <view class="summary-item">
+        <text class="summary-value">{{summary.totalPolicies || 0}}</text>
+        <text class="summary-label">可用政策</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value green">{{summary.matchedCount || 0}}</text>
+        <text class="summary-label">匹配政策</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value orange">¥{{summary.totalBenefitText || '0'}}</text>
+        <text class="summary-label">预估年福利</text>
+      </view>
+    </view>
+    <view class="summary-tip" wx:if="{{industry}}">根据企业行业（{{industry}}）与年用电量智能匹配</view>
+  </view>
+
+  <!-- 类型筛选 -->
+  <scroll-view scroll-x class="type-tabs">
+    <view class="type-tab {{typeFilter === item.key ? 'active' : ''}}"
+          wx:for="{{typeTabs}}" wx:key="key"
+          data-key="{{item.key}}" bindtap="onTypeChange">
+      {{item.label}}
+    </view>
+  </scroll-view>
+
+  <!-- 政策列表 -->
+  <view class="policy-card" wx:for="{{policies}}" wx:key="id" data-index="{{index}}">
+    <view class="policy-top">
+      <text class="policy-type {{item.policy.policyType}}">{{item.typeLabel}}</text>
+      <text class="match-badge {{item.matched ? 'matched' : ''}}">{{item.matched ? '✓ 可申报' : '未匹配'}}</text>
+    </view>
+    <text class="policy-title">{{item.policy.title}}</text>
+    <text class="policy-desc">{{item.policy.description || item.policy.eligibility}}</text>
+    <view class="policy-rows">
+      <view class="policy-row" wx:if="{{item.policy.region}}">
+        <text class="policy-label">区域</text>
+        <text class="policy-value">{{item.policy.region}}</text>
+      </view>
+      <view class="policy-row" wx:if="{{item.policy.benefitAmount}}">
+        <text class="policy-label">预估福利</text>
+        <text class="policy-value highlight">¥{{item.benefitAmountText}}/年</text>
+      </view>
+      <view class="policy-row" wx:if="{{item.policy.applicationDeadline}}">
+        <text class="policy-label">申报截止</text>
+        <text class="policy-value">{{item.policy.applicationDeadline}}</text>
+      </view>
+      <view class="policy-row" wx:if="{{item.policy.source}}">
+        <text class="policy-label">政策依据</text>
+        <text class="policy-value source">{{item.policy.source}}</text>
+      </view>
+    </view>
+    <button class="apply-btn {{item.matched ? '' : 'disabled'}}" bindtap="onApply" data-index="{{index}}">
+      {{item.matched ? '立即申报' : '了解详情'}}
+    </button>
+  </view>
+
+  <view class="empty-state" wx:if="{{!loading && policies.length === 0}}">
+    <text>暂无相关政策</text>
+  </view>
+</view>

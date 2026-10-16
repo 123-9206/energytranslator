@@ -1,0 +1,47 @@
+<view class="container">
+  <view class="loading-tip" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+    <!-- 总年省 hero -->
+    <view class="hero-card">
+      <text class="hero-label">预计年度总节省</text>
+      <view class="hero-value">
+        <text class="hero-num">{{wallet.totalSavedAnnual}}</text>
+        <text class="hero-unit">{{wallet.currency}}</text>
+      </view>
+      <text class="hero-sub">绿电 + 诊断优化 + 虚拟电厂 综合收益</text>
+    </view>
+
+    <!-- 分项明细 -->
+    <view class="grid">
+      <view class="grid-item">
+        <text class="g-val">{{wallet.diagnosisSavingAnnual}}</text>
+        <text class="g-label">AI诊断年省(元)</text>
+      </view>
+      <view class="grid-item">
+        <text class="g-val">{{wallet.greenSavingAnnual}}</text>
+        <text class="g-label">绿电年省(元)</text>
+      </view>
+      <view class="grid-item">
+        <text class="g-val">{{wallet.vppSettled}}</text>
+        <text class="g-label">VPP已结算(元)</text>
+      </view>
+      <view class="grid-item">
+        <text class="g-val">{{wallet.vppWithdrawable}}</text>
+        <text class="g-label">VPP可提现(元)</text>
+      </view>
+    </view>
+
+    <view class="tip-card" bindtap="goVpp">
+      <text class="tip-text">VPP 收益可提现 → 去「我的报名 / 收益」页申请提现</text>
+      <text class="tip-arrow">›</text>
+    </view>
+
+    <view class="update-tip" wx:if="{{wallet.updatedAt}}">
+      <text>数据更新：{{wallet.updatedAt}}</text>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,46 @@
+<view class="container">
+  <!-- 用户信息区 -->
+  <view class="user-section" wx:if="{{logged}}">
+    <view class="user-card">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="username">{{userInfo.nickname || userInfo.username || '用户'}}</text>
+        <text class="enterprise" wx:if="{{userInfo.enterprise}}">{{userInfo.enterprise}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="user-section" wx:else>
+    <view class="user-card guest" bindtap="onLogin">
+      <view class="avatar-placeholder">👤</view>
+      <view class="user-info">
+        <text class="username">未登录</text>
+        <text class="login-hint">点击登录 / 注册</text>
+      </view>
+      <text class="arrow">▶</text>
+    </view>
+  </view>
+
+  <!-- 菜单列表 -->
+  <view class="menu-section">
+    <view class="menu-item" wx:for="{{menuItems}}" wx:key="index" bindtap="onMenuTap" data-index="{{index}}">
+      <view class="menu-left">
+        <text class="menu-icon">{{item.icon}}</text>
+        <text class="menu-label">{{item.label}}</text>
+      </view>
+      <text class="menu-arrow">▶</text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section" wx:if="{{logged}}">
+    <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-section">
+    <text class="version-text">能耗翻译官 v{{appVersion}}</text>
+    <text class="version-tip" bindtap="onCheckUpdate">点击检查更新</text>
+  </view>
+</view>

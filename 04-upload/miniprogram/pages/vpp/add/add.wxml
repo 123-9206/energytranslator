@@ -1,0 +1,87 @@
+<view class="container">
+  <view class="form-section">
+    <view class="form-title">基本信息</view>
+
+    <view class="form-item">
+      <text class="label">资源名称 *</text>
+      <input class="input" placeholder="例如: 厂区储能柜1号" value="{{form.name}}" data-field="name" bindinput="onFieldInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">资源类型 *</text>
+      <picker mode="selector" range="{{resourceTypes}}" range-key="label" value="{{selectedTypeIndex}}" bindchange="onTypeChange">
+        <view class="picker-value">{{resourceTypes[selectedTypeIndex].label}}</view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">额定功率 (kW) *</text>
+      <input class="input" type="digit" placeholder="例如: 100" value="{{form.ratedPower}}" data-field="ratedPower" bindinput="onFieldInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">安装位置</text>
+      <input class="input" placeholder="例如: 1号厂房东侧" value="{{form.location}}" data-field="location" bindinput="onFieldInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">响应时间 (秒)</text>
+      <input class="input" type="digit" placeholder="例如: 10" value="{{form.responseTime}}" data-field="responseTime" bindinput="onFieldInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">持续时长 (分钟)</text>
+      <input class="input" type="digit" placeholder="例如: 120" value="{{form.continuousTime}}" data-field="continuousTime" bindinput="onFieldInput" />
+    </view>
+  </view>
+
+  <!-- 储能专用字段 -->
+  <view class="form-section" wx:if="{{form.type === 'storage'}}">
+    <view class="form-title">储能参数</view>
+
+    <view class="form-item">
+      <text class="label">最小SOC (%)</text>
+      <input class="input" type="digit" placeholder="默认 20" value="{{form.socMin}}" data-field="socMin" bindinput="onFieldInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">最大SOC (%)</text>
+      <input class="input" type="digit" placeholder="默认 90" value="{{form.socMax}}" data-field="socMax" bindinput="onFieldInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">额定容量 (kWh)</text>
+      <input class="input" type="digit" placeholder="例如: 200" value="{{form.ratedCapacity}}" data-field="ratedCapacity" bindinput="onFieldInput" />
+    </view>
+  </view>
+
+  <!-- 光伏专用字段 -->
+  <view class="form-section" wx:if="{{form.type === 'solar'}}">
+    <view class="form-title">光伏参数</view>
+
+    <view class="form-item">
+      <text class="label">组件容量 (kWp)</text>
+      <input class="input" type="digit" placeholder="例如: 50" value="{{form.panelCapacity}}" data-field="panelCapacity" bindinput="onFieldInput" />
+    </view>
+  </view>
+
+  <!-- 关联设备 -->
+  <view class="form-section" wx:if="{{devices.length > 0}}">
+    <view class="form-title">关联设备（可选）</view>
+
+    <view class="form-item">
+      <text class="label">选择已有设备</text>
+      <picker mode="selector" range="{{devices}}" range-key="name" bindchange="onDeviceChange">
+        <view class="picker-value">点击选择设备</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 按钮 -->
+  <view class="btn-group">
+    <button class="btn-cancel" bindtap="cancel">取消</button>
+    <button class="btn-submit" bindtap="submit" loading="{{submitting}}" disabled="{{submitting}}">
+      {{submitting ? '提交中...' : '提交'}}
+    </button>
+  </view>
+</view>

@@ -1,0 +1,148 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.loading-tip {
+  text-align: center;
+  padding: 200rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.amount-hero {
+  background: linear-gradient(135deg, #07C160 0%, #05a34e 100%);
+  padding: 48rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.amount-label {
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 12rpx;
+}
+
+.amount-row {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 16rpx;
+}
+
+.amount-symbol {
+  font-size: 36rpx;
+  color: #fff;
+  margin-right: 4rpx;
+}
+
+.amount-value {
+  font-size: 64rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.status-tag {
+  font-size: 24rpx;
+  padding: 6rpx 24rpx;
+  border-radius: 20rpx;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.status-tag.paid {
+  background: rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+}
+
+.detail-section {
+  background: #fff;
+  margin: 24rpx;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24rpx;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24rpx;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.d-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.d-value {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #999;
+}
+
+.action-bar {
+  padding: 24rpx 32rpx 48rpx;
+}
+
+.withdraw-btn {
+  background: #07C160;
+  color: #fff;
+  font-size: 30rpx;
+  border-radius: 44rpx;
+  line-height: 88rpx;
+}
+
+.status-tag.withdrawn {
+  background: rgba(135, 206, 235, 0.35);
+  color: #e0f7ff;
+}

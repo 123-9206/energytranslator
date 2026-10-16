@@ -1,0 +1,81 @@
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+    <!-- 超出阈值警告 -->
+    <view class="tip-card" wx:if="{{quota.warning}}">
+      <text class="tip-icon">⚠️</text>
+      <text class="tip-text">{{quota.warning}}</text>
+    </view>
+
+    <!-- 当前配额概览 -->
+    <view class="quota-card">
+      <view class="quota-header">
+        <text class="quota-year">{{quota.year}}年度碳配额</text>
+        <text class="quota-status {{quota.usageRate >= 100 ? 'danger' : ''}}">
+          {{quota.statusText}}
+        </text>
+      </view>
+      <view class="quota-value">
+        <text class="quota-number">{{quota.remaining}}</text>
+        <text class="quota-unit">kg CO₂</text>
+      </view>
+      <text class="quota-label">剩余配额</text>
+
+      <!-- 使用进度 -->
+      <view class="progress-wrap" style="margin-top: 24rpx;">
+        <view class="progress-bar">
+          <view class="progress-fill {{quota.usageRate >= 80 ? (quota.usageRate >= 100 ? 'danger' : 'warning') : ''}}"
+                style="width: {{quota.usageRate > 100 ? 100 : quota.usageRate}}%;"></view>
+        </view>
+        <view class="progress-info">
+          <text>已用 {{quota.consumed}} kg</text>
+          <text>总额 {{quota.total}} kg</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 配额明细 -->
+    <view class="quota-grid">
+      <view class="quota-item">
+        <text class="item-value">{{quota.allocated}}</text>
+        <text class="item-label">核定配额(kg)</text>
+      </view>
+      <view class="quota-item">
+        <text class="item-value">{{quota.purchased}}</text>
+        <text class="item-label">已购碳汇(kg)</text>
+      </view>
+      <view class="quota-item">
+        <text class="item-value">{{quota.consumed}}</text>
+        <text class="item-label">已消耗(kg)</text>
+      </view>
+      <view class="quota-item">
+        <text class="item-value">{{quota.alertThreshold}}%</text>
+        <text class="item-label">预警阈值</text>
+      </view>
+    </view>
+
+    <!-- 历史记录 -->
+    <view class="history-card">
+      <view class="card-title">历年配额</view>
+      <view class="history-list" wx:if="{{history.length > 0}}">
+        <view class="history-item" wx:for="{{history}}" wx:key="id">
+          <text class="history-year">{{item.year}}年</text>
+          <view class="history-detail">
+            <text class="history-used">{{item.consumedQuota}} / {{item.allocatedQuota + item.purchasedQuota}} kg</text>
+            <text class="history-rate {{item.usageRate >= 80 ? (item.usageRate >= 100 ? 'danger' : 'warning') : ''}}">
+              使用率 {{item.usageRate}}%
+            </text>
+          </view>
+        </view>
+      </view>
+      <view class="empty-tip" wx:else>
+        <text>暂无历史配额记录</text>
+      </view>
+    </view>
+  </block>
+</view>

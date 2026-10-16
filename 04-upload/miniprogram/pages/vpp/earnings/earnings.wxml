@@ -1,0 +1,39 @@
+<view class="container">
+  <!-- 收益总览 -->
+  <view class="hero-section">
+    <view class="hero-card">
+      <text class="hero-label">累计总收益</text>
+      <view class="hero-amount">
+        <text class="hero-currency">¥</text>
+        <text class="hero-value">{{totalEarnings}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 收益列表 -->
+  <view class="earnings-section" wx:if="{{!loading}}">
+    <view class="section-title">收益明细</view>
+    <view class="earnings-list" wx:if="{{earningsList.length > 0}}">
+      <view class="earnings-item" wx:for="{{earningsList}}" wx:key="id" bindtap="onItemTap" data-id="{{item.id}}">
+        <view class="item-left">
+          <text class="item-name">{{item.period || 'VPP结算'}}</text>
+          <text class="item-date">{{statusText(item.status)}}</text>
+        </view>
+        <view class="item-right">
+          <text class="item-amount">+{{item.summary.totalAmount || 0}}</text>
+          <text class="item-unit">元</text>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">💰</text>
+      <text class="empty-text">暂无收益记录</text>
+      <text class="empty-hint">参与VPP活动即可获得收益</text>
+    </view>
+  </view>
+</view>

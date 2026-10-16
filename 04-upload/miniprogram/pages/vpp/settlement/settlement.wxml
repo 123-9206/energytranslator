@@ -1,0 +1,75 @@
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading && settlement}}">
+    <!-- 结算金额 -->
+    <view class="amount-hero">
+      <text class="amount-label">结算金额</text>
+      <view class="amount-row">
+        <text class="amount-symbol">¥</text>
+        <text class="amount-value">{{settlement.totalCompensation}}</text>
+      </view>
+      <view class="status-tag {{settlement.status}}">{{settlement.status === 'paid' ? '已支付' : settlement.status === 'approved' ? '已确认' : settlement.status === 'withdrawn' ? '已提现' : settlement.status === 'confirmed' ? '已确认' : settlement.status === 'pending' ? '待结算' : settlement.status}}</view>
+    </view>
+
+    <view class="action-bar" wx:if="{{canWithdraw}}">
+      <button class="withdraw-btn" bindtap="onWithdraw">申请提现</button>
+    </view>
+
+    <!-- 结算明细 -->
+    <view class="detail-section">
+      <view class="section-title">结算明细</view>
+
+      <view class="detail-grid">
+        <view class="detail-item">
+          <text class="d-label">容量补偿</text>
+          <text class="d-value">¥{{settlement.totalCapacityCompensation}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="d-label">电量补偿</text>
+          <text class="d-value">¥{{settlement.totalEnergyCompensation}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="d-label">碳减排量</text>
+          <text class="d-value">{{settlement.totalCarbonReduction}} kg</text>
+        </view>
+        <view class="detail-item">
+          <text class="d-label">平均响应率</text>
+          <text class="d-value">{{settlement.avgResponseRate}}%</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="detail-section">
+      <view class="section-title">基本信息</view>
+
+      <view class="info-list">
+        <view class="info-row">
+          <text class="info-label">结算周期</text>
+          <text class="info-value">{{settlement.period || settlement.startDate + ' ~ ' + settlement.endDate}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">响应完成率</text>
+          <text class="info-value">{{settlement.completedCount}} / {{settlement.responseCount}} 次</text>
+        </view>
+        <view class="info-row" wx:if="{{settlement.createdAt}}">
+          <text class="info-label">生成时间</text>
+          <text class="info-value">{{settlement.createdAt}}</text>
+        </view>
+        <view class="info-row" wx:if="{{settlement.remarks}}">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{settlement.remarks}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && !settlement}}">
+    <text class="empty-text">未找到结算记录</text>
+  </view>
+</view>

@@ -1,0 +1,94 @@
+<view class="container">
+  <!-- 顶部汇总 -->
+  <view class="summary-header">
+    <view class="summary-item">
+      <text class="s-value">{{summary.totalCapacity}}</text>
+      <text class="s-label">总容量(kW)</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="s-value green">{{summary.onlineCount}}</text>
+      <text class="s-label">在线设备</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="s-value gold">{{summary.totalEarnings}}</text>
+      <text class="s-label">累计收益(元)</text>
+    </view>
+  </view>
+
+  <!-- Tab切换 -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === item.key ? 'active' : ''}}"
+          wx:for="{{tabs}}" wx:key="key"
+          bindtap="onTabChange" data-key="{{item.key}}">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 我的资源 -->
+  <block wx:if="{{!loading && activeTab === 'resources'}}">
+    <view class="resource-list" wx:if="{{resources.length > 0}}">
+      <view class="resource-card" wx:for="{{resources}}" wx:key="id">
+        <view class="resource-header">
+          <text class="resource-name">{{item.name || '未命名资源'}}</text>
+          <view class="status-tag {{statusColors[item.status]}}">{{statusLabels[item.status] || item.status}}</view>
+        </view>
+        <view class="resource-body">
+          <view class="resource-info">
+            <text class="info-label">容量</text>
+            <text class="info-value">{{item.capacity}} kW</text>
+          </view>
+          <view class="resource-info">
+            <text class="info-label">类型</text>
+            <text class="info-value">{{item.type || '储能'}}</text>
+          </view>
+          <view class="resource-info" wx:if="{{item.earnings !== undefined}}">
+            <text class="info-label">收益</text>
+            <text class="info-value earnings">{{item.earnings}} 元</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">⚡</text>
+      <text class="empty-text">暂无VPP资源</text>
+      <text class="empty-hint">添加设备后可加入VPP</text>
+    </view>
+  </block>
+
+  <!-- VPP活动 -->
+  <block wx:if="{{!loading && activeTab === 'activities'}}">
+    <view class="activity-list" wx:if="{{activities.length > 0}}">
+      <view class="activity-card" wx:for="{{activities}}" wx:key="id" bindtap="onActivityTap" data-id="{{item.id}}">
+        <view class="activity-header">
+          <text class="activity-name">{{item.name}}</text>
+          <view class="activity-status {{item.status === 'active' ? 'active' : item.status === 'upcoming' ? 'upcoming' : 'ended'}}">
+            {{item.status === 'active' ? '进行中' : item.status === 'upcoming' ? '即将开始' : '已结束'}}
+          </view>
+        </view>
+        <view class="activity-body">
+          <text class="activity-time">{{item.startTime}} ~ {{item.endTime}}</text>
+          <view class="activity-tags">
+            <text class="tag" wx:if="{{item.capacity}}">容量: {{item.capacity}}kW</text>
+            <text class="tag subsidy" wx:if="{{item.subsidy}}">补贴: ¥{{item.subsidy}}/kWh</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📅</text>
+      <text class="empty-text">暂无VPP活动</text>
+    </view>
+  </block>
+
+  <!-- 收益入口 -->
+  <view class="fab-btn" bindtap="goToEarnings">
+    <text class="fab-icon">💰</text>
+  </view>
+</view>

@@ -1,0 +1,83 @@
+<view class="container">
+  <view class="loading-tip" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+    <!-- 收益测算器 -->
+    <view class="calc-card">
+      <view class="card-title">收益测算（示意）</view>
+      <view class="calc-desc">输入本企业预计月省电费基数与平台留存比例，快速估算合作分润。</view>
+      <view class="form-row">
+        <text class="form-label">省电费基数(元/月)</text>
+        <input class="form-input" type="digit" placeholder="如 20000" value="{{calc.savingBase}}" data-field="savingBase" bindinput="onCalcInput" />
+      </view>
+      <view class="form-row">
+        <text class="form-label">平台留存比例(%)</text>
+        <input class="form-input" type="digit" placeholder="0-100" value="{{calc.ratio}}" data-field="ratio" bindinput="onCalcInput" />
+      </view>
+      <view class="calc-btns">
+        <button class="btn-calc" bindtap="doCalc">测算</button>
+        <button class="btn-reset" bindtap="resetCalc" wx:if="{{calcResult}}">清除</button>
+      </view>
+
+      <view class="calc-result" wx:if="{{calcResult}}">
+        <view class="cr-row">
+          <text>省电费基数</text><text class="cr-val">{{calcResult.base}} 元</text>
+        </view>
+        <view class="cr-row">
+          <text>平台留存({{calcResult.ratio}}%)</text><text class="cr-val green">{{calcResult.platformAmount}} 元</text>
+        </view>
+        <view class="cr-row">
+          <text>合作方分成</text><text class="cr-val orange">{{calcResult.partnerAmount}} 元</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 合作售电公司 -->
+    <view class="section-title">合作售电公司</view>
+    <view class="empty-tip" wx:if="{{partners.length === 0}}">
+      <text>暂未关联合作售电公司</text>
+      <text class="empty-sub">平台将为您匹配持牌售电公司，支持跨省合规落地省电费能力。</text>
+    </view>
+    <view class="partner-card" wx:for="{{partners}}" wx:key="id">
+      <view class="p-head">
+        <text class="p-name">{{item.companyName}}</text>
+        <text class="p-status">{{item.statusText}}</text>
+      </view>
+      <view class="p-meta">
+        <text wx:if="{{item.licenseRegion}}">牌照地区：{{item.licenseRegion}}</text>
+        <text wx:if="{{item.licenseNo}}">牌照编号：{{item.licenseNo}}</text>
+        <text wx:if="{{item.ratioPercent != null}}">平台留存：{{item.ratioPercent}}%</text>
+      </view>
+    </view>
+
+    <!-- 分润结算单 -->
+    <view class="section-title">分润结算单</view>
+    <view class="empty-tip" wx:if="{{shares.length === 0}}">
+      <text>暂无分润结算单</text>
+    </view>
+    <view class="share-card" wx:for="{{shares}}" wx:key="id">
+      <view class="s-head">
+        <text class="s-name">{{item.partnerCompanyName}}</text>
+        <text class="s-status">{{item.statusText}}</text>
+      </view>
+      <view class="s-period" wx:if="{{item.period}}">账期 {{item.period}}</view>
+      <view class="s-grid">
+        <view class="s-item">
+          <text class="s-val">{{item.savingBase}}</text>
+          <text class="s-key">省电费基数(元)</text>
+        </view>
+        <view class="s-item">
+          <text class="s-val green">{{item.platformShareAmount}}</text>
+          <text class="s-key">平台留存(元)</text>
+        </view>
+        <view class="s-item">
+          <text class="s-val orange">{{item.partnerShareAmount}}</text>
+          <text class="s-key">合作方(元)</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>
