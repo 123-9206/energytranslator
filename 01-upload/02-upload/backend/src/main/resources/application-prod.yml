@@ -1,0 +1,14 @@
+# Production requires a separate deployment and security review.
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: ${MONGODB_DATABASE}
+seed:
+  enabled: false
+demo:
+  login-enabled: false
+control:
+  enabled: false

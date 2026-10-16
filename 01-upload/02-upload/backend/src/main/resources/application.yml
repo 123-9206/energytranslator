@@ -1,0 +1,106 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:8080}
+
+# Actuator管理端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+spring:
+  application:
+    name: energy-translator-backend
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/energy_translator_demo}
+      database: ${MONGODB_DATABASE:energy_translator_demo}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 7200000  # 2小时
+  refresh-expiration: 604800000  # 7天
+
+# 系统配置
+system:
+  default-electricity-price: 0.6  # 默认电价(元/kWh)
+  default-carbon-factor: 0.785   # 默认碳排放因子(kg CO2/kWh)
+  vpp:
+    default-capacity-price: 50    # 默认容量补贴(元/kW)
+    default-energy-price: 2       # 默认电量补贴(元/kWh)
+    max-resources-per-enterprise: 50
+
+# 设备采集配置
+collect:
+  modbus:
+    enabled: false
+  mqtt:
+    enabled: false
+  http:
+    enabled: false
+  thread-pool-size: 10
+  default-interval-seconds: 60
+  poll-interval: 60000
+
+# MQTT配置
+mqtt:
+  broker-url: ${MQTT_BROKER_URL:tcp://localhost:1883}
+  client-id: energy-translator-backend
+  username: ${MQTT_USERNAME:}
+  password: ${MQTT_PASSWORD:}
+  topics:
+    device-data: energy/device/+/data
+    device-status: energy/device/+/status
+
+# CORS 跨域白名单（生产环境必须限制为具体域名）
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://127.0.0.1:5173}
+
+# 电费单体检（L0 钩子）
+# ⚠️ tariff 默认值为江苏一般工商业参考值，正式上线前必须替换为用户提供的最新江苏目录电价表
+billcheck:
+  upload-dir: ${BILLCHECK_UPLOAD_DIR:./data/uploads/bills}
+  ai:
+    base-url: ${BILLCHECK_AI_BASE_URL:https://api.siliconflow.cn/v1}
+    api-key: ${BILLCHECK_AI_API_KEY:}
+    model: ${BILLCHECK_AI_MODEL:Qwen/Qwen3-VL-32B-Instruct}
+    timeout-ms: 60000
+    max-retries: 2
+  tariff:
+    capacity-price-per-kva: 30.0      # 元/kVA·月，按容量基本电价（待电价表核实）
+    demand-price-per-kw: 40.0         # 元/kW·月，按需量基本电价（待电价表核实）
+    demand-floor-ratio: 0.40          # 需量计费下限系数
+    tip-price: 1.20                   # 尖峰电度电价 元/kWh（待电价表核实）
+    peak-price: 1.00                  # 高峰
+    flat-price: 0.65                  # 平段
+    valley-price: 0.35                # 低谷
+    power-factor-standard: 0.90
+    shiftable-ratio: 0.10
+    low-load-factor: 0.30
+    source-note: "江苏省一般工商业目录电价（待替换为最新电价表后更新本说明）"
+
+logging:
+  level:
+    com.energy.translator: INFO
+    org.springframework.data.mongodb: WARN
+
+# Local portfolio defaults. Use a separate demo database.
+seed:
+  enabled: ${SEED_ENABLED:false}
+demo:
+  login-enabled: ${DEMO_LOGIN_ENABLED:false}
+control:
+  enabled: ${CONTROL_ENABLED:false}
+bootstrap:
+  admin:
+    username: ${BOOTSTRAP_ADMIN_USERNAME:admin}
+    password: ${BOOTSTRAP_ADMIN_PASSWORD:}
