@@ -1,0 +1,40 @@
+# Local demo only: published ports are restricted to the loopback interface.
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  backend:
+    build:
+      context: ../backend
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      JWT_SECRET: ${JWT_SECRET:?Run python scripts/init_local_env.py first}
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-admin}
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD:?Generate a private bootstrap password first}
+      MONGODB_URI: mongodb://mongodb:27017/energy_translator_demo
+      MONGODB_DATABASE: energy_translator_demo
+      SEED_ENABLED: ${SEED_ENABLED:-false}
+      DEMO_LOGIN_ENABLED: ${DEMO_LOGIN_ENABLED:-false}
+      CONTROL_ENABLED: "false"
+      BILLCHECK_AI_API_KEY: ${BILLCHECK_AI_API_KEY:-}
+      BILLCHECK_AI_BASE_URL: ${BILLCHECK_AI_BASE_URL:-https://api.siliconflow.cn/v1}
+      BILLCHECK_AI_MODEL: ${BILLCHECK_AI_MODEL:-Qwen/Qwen3-VL-32B-Instruct}
+      BILLCHECK_UPLOAD_DIR: /app/data/uploads/bills
+    volumes:
+      - bill_uploads:/app/data/uploads/bills
+    depends_on:
+      mongodb:
+        condition: service_healthy
+volumes:
+  mongodb_data:
+  bill_uploads:

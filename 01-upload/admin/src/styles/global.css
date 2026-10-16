@@ -1,0 +1,92 @@
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #273548;
+  --border: #334155;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent: #38bdf8;
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+  --purple: #a78bfa;
+  --cyan: #22d3ee;
+  --pink: #f472b6;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Element Plus dark theme overrides */
+.el-menu {
+  border-right: none !important;
+  background: var(--bg-secondary) !important;
+}
+.el-menu-item {
+  color: var(--text-secondary) !important;
+  background: transparent !important;
+}
+.el-menu-item:hover, .el-menu-item.is-active {
+  color: var(--accent) !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+}
+.el-card {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+}
+.el-table {
+  background: transparent !important;
+  --el-table-bg-color: transparent !important;
+  --el-table-tr-bg-color: transparent !important;
+  --el-table-header-bg-color: var(--bg-tertiary) !important;
+  --el-table-row-hover-bg-color: rgba(56, 189, 248, 0.05) !important;
+  --el-table-border-color: var(--border) !important;
+  --el-table-text-color: var(--text-primary) !important;
+  --el-table-header-text-color: var(--text-secondary) !important;
+}
+.el-table th.el-table__cell {
+  background: var(--bg-tertiary) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.el-pagination {
+  --el-pagination-bg-color: transparent !important;
+  --el-pagination-text-color: var(--text-secondary) !important;
+}
+.el-pagination button, .el-pager li {
+  color: var(--text-secondary) !important;
+  background: var(--bg-tertiary) !important;
+}
+.el-pager li.is-active {
+  background: var(--accent) !important;
+  color: #0f172a !important;
+}
+.el-dialog {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border) !important;
+}
+.el-form-item__label { color: var(--text-secondary) !important; }
+.el-input__wrapper { background: var(--bg-tertiary) !important; box-shadow: none !important; border: 1px solid var(--border) !important; }
+.el-input__inner { color: var(--text-primary) !important; }
+.el-select .el-input__wrapper { background: var(--bg-tertiary) !important; }
+.el-select-dropdown { background: var(--bg-secondary) !important; border: 1px solid var(--border) !important; }
+.el-select-dropdown__item { color: var(--text-primary) !important; }
+.el-select-dropdown__item.hover, .el-select-dropdown__item:hover { background: rgba(56, 189, 248, 0.08) !important; }
+.el-button--primary { --el-button-bg-color: var(--accent) !important; --el-button-border-color: var(--accent) !important; --el-button-text-color: #0f172a !important; }
+.el-tag { border: none !important; }
+.el-empty__description p { color: var(--text-secondary) !important; }
+.el-statistic__number { color: var(--text-primary) !important; }
+.el-statistic__head { color: var(--text-secondary) !important; }
+.el-descriptions__title { color: var(--text-primary) !important; }
+.el-switch.is-checked .el-switch__core { background: var(--accent) !important; border-color: var(--accent) !important; }
+.el-message-box { background: var(--bg-secondary) !important; border: 1px solid var(--border) !important; color: var(--text-primary) !important; }
+.el-message-box__title { color: var(--text-primary) !important; }
+.el-message-box__message { color: var(--text-secondary) !important; }
+.el-tabs__item { color: var(--text-secondary) !important; }
+.el-tabs__item.is-active { color: var(--accent) !important; }
