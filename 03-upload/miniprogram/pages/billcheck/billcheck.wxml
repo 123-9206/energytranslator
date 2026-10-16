@@ -1,0 +1,46 @@
+<view class="page">
+  <!-- 顶部说明 -->
+  <view class="hero">
+    <view class="hero-title">电费单体检</view>
+    <view class="hero-desc">拍一张电费单，告诉你白交了多少钱。容需计费、峰谷结构、功率因数、容量异常，一次查完。</view>
+  </view>
+
+  <!-- 第1步：上传 -->
+  <view class="card">
+    <view class="card-title">第 1 步：上传电费单照片</view>
+    <view class="upload-box" bindtap="chooseImage">
+      <image wx:if="{{imagePath}}" src="{{imagePath}}" mode="widthFix" class="preview" />
+      <view wx:else class="upload-hint">点击拍照或从相册选择{'\n'}（jpg / png，10MB以内）</view>
+    </view>
+
+    <view class="label">手机号（必填，用于查询报告）</view>
+    <input class="input" type="number" maxlength="11" placeholder="11位手机号" data-field="phone" bindinput="onInput" value="{{phone}}" />
+    <view class="label">联系人（选填）</view>
+    <input class="input" placeholder="怎么称呼你" data-field="contactName" bindinput="onInput" value="{{contactName}}" />
+    <view class="label">工厂名称（选填）</view>
+    <input class="input" placeholder="报告抬头用" data-field="factoryName" bindinput="onInput" value="{{factoryName}}" />
+
+    <button class="btn primary" bindtap="submit" disabled="{{submitting}}">{{submitting ? '提交中…' : '提交体检'}}</button>
+    <view wx:if="{{submitMsg}}" class="msg {{submitError ? 'error' : 'ok'}}">{{submitMsg}}</view>
+
+    <view wx:if="{{ticketId}}" class="ticket" bindtap="copyTicketId">
+      <view class="ticket-title">提交成功，点击复制你的体检单号：</view>
+      <view class="ticket-id">{{ticketId}}</view>
+      <view class="ticket-note">人工复核完成后（一般1个工作日内），在下方"第 2 步"输入单号和手机号查看报告。</view>
+    </view>
+  </view>
+
+  <!-- 第2步：查询 -->
+  <view class="card">
+    <view class="card-title">第 2 步：查询体检报告</view>
+    <view class="label">体检单号</view>
+    <input class="input" placeholder="提交后给你的单号" data-field="queryId" bindinput="onInput" value="{{queryId}}" />
+    <view class="label">手机号</view>
+    <input class="input" type="number" maxlength="11" placeholder="提交时填的手机号" data-field="queryPhone" bindinput="onInput" value="{{queryPhone}}" />
+    <button class="btn secondary" bindtap="query" disabled="{{querying}}">{{querying ? '查询中…' : '查询报告'}}</button>
+    <view wx:if="{{queryMsg}}" class="msg {{queryError ? 'error' : 'ok'}}">{{queryMsg}}</view>
+    <scroll-view wx:if="{{reportText}}" scroll-y class="report">{{reportText}}</scroll-view>
+  </view>
+
+  <view class="footnote">账单数据经四时段电量与费用加总两道勾稽校验{'\n'}你的电费单照片仅用于本次体检分析</view>
+</view>

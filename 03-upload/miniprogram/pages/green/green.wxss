@@ -1,0 +1,164 @@
+/* pages/green/green.wxss */
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 20rpx 24rpx 160rpx;
+  box-sizing: border-box;
+}
+
+.loading-tip {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.summary-section {
+  background: linear-gradient(135deg, #07C160 0%, #06AD56 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(7, 193, 96, 0.25);
+}
+
+.summary-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 24rpx;
+}
+
+.summary-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.summary-item {
+  width: 50%;
+  padding: 10rpx 0;
+  box-sizing: border-box;
+}
+
+.summary-value {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.summary-value.green {
+  color: #d4f7e4;
+}
+
+.summary-value.orange {
+  color: #ffe1a8;
+}
+
+.summary-label {
+  display: block;
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30rpx 4rpx 16rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.section-action {
+  font-size: 26rpx;
+  color: #07C160;
+}
+
+.contract-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 26rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.contract-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.contract-no {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.contract-status {
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  background: #e8f8ef;
+  color: #07C160;
+}
+
+.contract-status.completed {
+  background: #eef1f4;
+  color: #666;
+}
+
+.contract-status.terminated {
+  background: #fdeaea;
+  color: #FA5151;
+}
+
+.contract-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8rpx 0;
+  font-size: 26rpx;
+}
+
+.contract-row.time {
+  color: #999;
+}
+
+.contract-label {
+  color: #999;
+}
+
+.contract-value {
+  color: #333;
+}
+
+.contract-value.highlight {
+  color: #07C160;
+  font-weight: 600;
+}
+
+.contract-value.green {
+  color: #07C160;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 80rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.add-btn {
+  position: fixed;
+  bottom: 40rpx;
+  left: 40rpx;
+  right: 40rpx;
+  background: linear-gradient(135deg, #07C160, #06AD56);
+  color: #fff;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  box-shadow: 0 8rpx 20rpx rgba(7, 193, 96, 0.3);
+}

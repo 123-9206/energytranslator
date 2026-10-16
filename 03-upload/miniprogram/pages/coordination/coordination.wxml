@@ -1,0 +1,67 @@
+<!-- pages/coordination/coordination.wxml -->
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">分布式协同调度</view>
+    <view class="hero-sub">多企业可调负荷聚合 · 吸收 CN120767796B 思路（独立实现）</view>
+  </view>
+
+  <!-- 调度操作栏（始终可见） -->
+  <view class="panel coord-toolbar-wrap">
+    <view class="coord-toolbar">
+      <text class="ct-label">目标削减</text>
+      <input class="ct-input" type="number" value="{{target}}" bindinput="onTargetInput" placeholder="kW" />
+      <text class="ct-unit">kW</text>
+      <button class="ct-btn" size="mini" loading="{{loading}}" bindtap="rerun">调度</button>
+    </view>
+  </view>
+
+  <view class="panel" wx:if="{{coord}}">
+
+    <view class="kpi-grid">
+      <view class="kpi-card">
+        <view class="kpi-num c-blue">{{coord._regionalAdjKw}}<text class="kpi-u">kW</text></view>
+        <view class="kpi-lbl">区域可调容量</view>
+      </view>
+      <view class="kpi-card">
+        <view class="kpi-num c-green">{{coord._totalAllocKw}}<text class="kpi-u">kW</text></view>
+        <view class="kpi-lbl">已分配削减</view>
+      </view>
+      <view class="kpi-card">
+        <view class="kpi-num {{coord.shortfallKw > 1 ? 'c-red' : 'c-green'}}">{{coord._shortfallKw}}<text class="kpi-u">kW</text></view>
+        <view class="kpi-lbl">缺口</view>
+      </view>
+      <view class="kpi-card">
+        <view class="kpi-num c-purple">{{coord._fulfilledPct}}<text class="kpi-u">%</text></view>
+        <view class="kpi-lbl">目标达成率</view>
+      </view>
+    </view>
+
+    <view class="tip">协同成员 {{coord.memberCount}} 个（真实在网 {{coord.realMemberCount}} 个，其余为示例聚合成员）</view>
+
+    <view class="node-list">
+      <view class="node-item" wx:for="{{coord.nodes}}" wx:key="enterpriseId">
+        <view class="node-head">
+          <text class="node-name">{{item.name}}</text>
+          <text class="tag-me" wx:if="{{item.isCurrentUser}}">我</text>
+          <text class="tag-syn" wx:if="{{item.synthetic}}">示例</text>
+        </view>
+        <view class="node-row">
+          <text class="nr-l">可调负荷</text><text class="nr-v">{{item._adjLoadKw}} kW</text>
+          <text class="nr-l">响应延迟</text><text class="nr-v">{{item.responseDelayMin}} min</text>
+        </view>
+        <view class="node-row">
+          <text class="nr-l">可调性</text><text class="nr-v">{{item.adjustabilityLevel}}·{{item.adjustabilityScore}}</text>
+          <text class="nr-l">分配</text><text class="nr-v">{{item._allocKw}} kW</text>
+        </view>
+        <view class="node-action">{{item.action}}</view>
+      </view>
+    </view>
+
+    <view class="algo">{{coord.algorithmNote}}</view>
+  </view>
+
+  <view class="empty" wx:else>
+    <text class="empty-ico">📡</text>
+    <text>输入目标削减量，点「调度」生成协同方案</text>
+  </view>
+</view>

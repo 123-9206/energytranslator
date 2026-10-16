@@ -1,0 +1,220 @@
+<view class="container">
+  <!-- 顶部用户栏 -->
+  <view class="user-bar" wx:if="{{logged}}">
+    <view class="user-info" bindtap="goToProfile">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-text">
+        <text class="user-name">{{userInfo.nickname || userInfo.username || '用户'}}</text>
+        <text class="user-enterprise" wx:if="{{userInfo.enterprise}}">{{userInfo.enterprise}}</text>
+      </view>
+    </view>
+    <view class="date-text">{{todayDate}}</view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 主内容 -->
+  <block wx:if="{{!loading}}">
+    <!-- ===== 爆款点主入口：电费单体检（所有用户首屏第一位） ===== -->
+    <view class="hero-card" bindtap="goToBillCheck">
+      <view class="hero-badge">免费 · AI读单 · 人工复核</view>
+      <view class="hero-title">拍张电费单</view>
+      <view class="hero-sub">看看基本电费白交了多少</view>
+      <view class="hero-points">
+        <text class="hero-point">容需对比</text>
+        <text class="hero-point">峰谷结构</text>
+        <text class="hero-point">功率因数</text>
+      </view>
+      <view class="hero-cta">立即体检 ›</view>
+    </view>
+
+    <!-- ===== 访客分层：未登录只见钩子内容，不见空数据面板 ===== -->
+    <block wx:if="{{!logged}}">
+      <view class="guest-card">
+        <view class="guest-card-title">🐕 电表看门狗</view>
+        <view class="guest-card-desc">装一只小表，AI替你天天盯着用电。异常空转、突增跑冒，微信实时告警，每月只要九十九元起。</view>
+      </view>
+      <view class="guest-card">
+        <view class="guest-card-title">📋 体检报告长什么样</view>
+        <view class="guest-card-desc">一页看懂：基本电费是否多缴、峰谷用电结构、力调电费罚款，每条结论都标注账单出处，AI分析加人工复核双保险。</view>
+        <view class="guest-card-cta" bindtap="goToBillCheck">上传电费单试试 ›</view>
+      </view>
+      <view class="guest-login" bindtap="goToProfile">
+        <text>已是企业用户？点此登录查看能耗面板 ›</text>
+      </view>
+    </block>
+
+    <!-- ===== 已登录企业用户：数据面板 ===== -->
+    <block wx:if="{{logged}}">
+    <!-- 今日概览卡片 -->
+    <view class="summary-card">
+      <view class="card-title">今日能耗概览</view>
+      <view class="summary-row">
+        <view class="summary-item">
+          <text class="summary-value">{{dashboard.todayEnergy}}</text>
+          <text class="summary-unit">kWh</text>
+          <text class="summary-label">今日用电</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-value carbon">{{dashboard.todayCarbon}}</text>
+          <text class="summary-unit">kg</text>
+          <text class="summary-label">碳排放</text>
+        </view>
+        <view class="summary-divider"></view>
+        <view class="summary-item">
+          <text class="summary-value cost">{{dashboard.todayCost}}</text>
+          <text class="summary-unit">元</text>
+          <text class="summary-label">今日费用</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-entry">
+      <view class="entry-item" bindtap="goToVPP">
+        <view class="entry-icon vpp-icon">⚡</view>
+        <text class="entry-text">VPP活动</text>
+      </view>
+      <view class="entry-item" bindtap="goToEnergy">
+        <view class="entry-icon energy-icon">📊</view>
+        <text class="entry-text">能耗记录</text>
+      </view>
+      <view class="entry-item" bindtap="goToCarbon">
+        <view class="entry-icon carbon-icon">🌱</view>
+        <text class="entry-text">碳报告</text>
+      </view>
+      <view class="entry-item" bindtap="goToProfile">
+        <view class="entry-icon setting-icon">⚙️</view>
+        <text class="entry-text">我的</text>
+      </view>
+    </view>
+
+    <!-- 更多服务：折叠收纳，不堆砌 -->
+    <view class="more-services">
+      <view class="more-services-header" bindtap="toggleMore">
+        <text class="more-services-title">更多服务</text>
+        <text class="more-services-arrow {{showMore ? 'open' : ''}}">›</text>
+      </view>
+      <view class="feature-grid" wx:if="{{showMore}}">
+        <view class="feature-card green-card" bindtap="goToGreen">
+          <view class="feature-card-top">
+            <text class="feature-icon">⚡</text>
+            <text class="feature-arrow">›</text>
+          </view>
+          <text class="feature-title">绿电中心</text>
+          <text class="feature-desc">绿电合同 · 光伏储能 · 绿证</text>
+        </view>
+        <view class="feature-card orange-card" bindtap="goToPolicy">
+          <view class="feature-card-top">
+            <text class="feature-icon">🎯</text>
+            <text class="feature-arrow">›</text>
+          </view>
+          <text class="feature-title">政策福利中心</text>
+          <text class="feature-desc">绿电补贴 · 需求响应匹配</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 本月汇总 -->
+    <view class="month-card">
+      <view class="card-title">本月汇总</view>
+      <view class="month-row">
+        <view class="month-item">
+          <text class="month-label">累计用电</text>
+          <text class="month-value">{{dashboard.monthEnergy}} kWh</text>
+        </view>
+        <view class="month-item">
+          <text class="month-label">碳排放</text>
+          <text class="month-value carbon">{{dashboard.monthCarbon}} kg</text>
+        </view>
+        <view class="month-item">
+          <text class="month-label">累计费用</text>
+          <text class="month-value cost">{{dashboard.monthCost}} 元</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近VPP活动 -->
+    <view class="activity-section">
+      <view class="section-header">
+        <text class="section-title">最近VPP活动</text>
+        <text class="section-more" bindtap="goToVPP">查看全部</text>
+      </view>
+      <view class="activity-list" wx:if="{{recentActivities.length > 0}}">
+        <view class="activity-item" wx:for="{{recentActivities}}" wx:key="id" bindtap="goToActivityDetail" data-id="{{item.id}}">
+          <view class="activity-status {{item.status === 'active' ? 'active' : 'ended'}}"></view>
+          <view class="activity-info">
+            <text class="activity-name">{{item.name}}</text>
+            <text class="activity-date">{{item.startTime}} ~ {{item.endTime}}</text>
+          </view>
+          <view class="activity-subsidy" wx:if="{{item.subsidy}}">
+            <text class="subsidy-text">¥{{item.subsidy}}</text>
+            <text class="subsidy-label">补贴/kWh</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty-tip" wx:else>
+        <text>暂无VPP活动</text>
+      </view>
+    </view>
+    </block>
+  </block>
+
+  <!-- 首次启动引导浮层（仅首次进入展示，纯 view 切换避免 swiper 吞事件） -->
+  <view class="guide-mask" wx:if="{{showGuide}}" catchtouchmove="preventMove">
+    <view class="guide-brand">能耗翻译官</view>
+
+    <!-- 屏1：产品定位 -->
+    <view class="guide-page-wrap" wx:if="{{guideCurrent === 0}}">
+      <view class="guide-emoji">⚡</view>
+      <view class="guide-title">把电表数据，翻译成"省钱方案"</view>
+      <view class="guide-desc">专为中小工厂打造的能效优化助手，让每一度电都花在刀刃上，告别看不懂的电费单。</view>
+    </view>
+
+    <!-- 屏2：核心价值 -->
+    <view class="guide-page-wrap" wx:if="{{guideCurrent === 1}}">
+      <view class="guide-emoji">📊</view>
+      <view class="guide-title">三大核心价值</view>
+      <view class="guide-list">
+        <view class="guide-li"><text class="guide-li-ico">🔍</text><text class="guide-li-txt">实时能耗可视化，异常用电一眼可见</text></view>
+        <view class="guide-li"><text class="guide-li-ico">🧠</text><text class="guide-li-txt">智能诊断报告，自动给出省钱方案</text></view>
+        <view class="guide-li"><text class="guide-li-ico">💰</text><text class="guide-li-txt">绿电 + 需求响应，让闲置容量变成收益</text></view>
+      </view>
+    </view>
+
+    <!-- 屏3：如何开始 -->
+    <view class="guide-page-wrap" wx:if="{{guideCurrent === 2}}">
+      <view class="guide-emoji">🚀</view>
+      <view class="guide-title">三步轻松上手</view>
+      <view class="guide-steps">
+        <view class="guide-step"><text class="step-no">1</text><text class="step-txt">添加电表 / 网关设备，自动采集数据</text></view>
+        <view class="guide-step"><text class="step-no">2</text><text class="step-txt">查看诊断报告，定位浪费与峰谷机会</text></view>
+        <view class="guide-step"><text class="step-no">3</text><text class="step-txt">参与 VPP 与绿电，把省下的变成赚到的</text></view>
+      </view>
+    </view>
+
+    <!-- 屏4：开始体验 -->
+    <view class="guide-page-wrap" wx:if="{{guideCurrent === 3}}">
+      <view class="guide-emoji">🌱</view>
+      <view class="guide-title">准备好了吗？</view>
+      <view class="guide-desc">点击下方按钮，立即开启你的能效优化之旅。我们重视你的隐私，详细请见《隐私政策》。</view>
+      <button class="guide-cta" catchtap="closeGuide">开始体验</button>
+    </view>
+
+    <!-- 进度点 -->
+    <view class="guide-dots">
+      <view class="guide-dot {{guideCurrent === idx ? 'active' : ''}}" wx:for="{{[0,1,2,3]}}" wx:key="*this" wx:for-index="idx"></view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="guide-actions">
+      <text class="guide-skip" catchtap="skipGuide">跳过</text>
+      <button class="guide-next {{guideCurrent === 3 ? 'hide' : ''}}" catchtap="nextGuide">下一步</button>
+    </view>
+  </view>
+</view>

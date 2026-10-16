@@ -1,0 +1,43 @@
+<view class="container">
+  <view class="form-card">
+    <view class="form-title">📋 新增绿电合同</view>
+    <view class="form-tip">绿电即风电/光伏等可再生能源电力，购买后可获绿证并抵扣碳排放</view>
+
+    <view class="form-group">
+      <text class="form-label">绿电供应商 *</text>
+      <input class="form-input" placeholder="如：XX风力发电场 / 售电公司" value="{{form.supplierName}}" data-field="supplierName" bindinput="onInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">合同电量 (kWh) *</text>
+      <input class="form-input" type="digit" placeholder="如：500000（50万度）" value="{{form.energyVolume}}" data-field="energyVolume" bindinput="onInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">绿电溢价 (元/kWh)</text>
+      <input class="form-input" type="digit" placeholder="一般 0.01~0.05" value="{{form.pricePremium}}" data-field="pricePremium" bindinput="onInput" />
+      <text class="form-hint">绿电比普通电贵出的部分，约1~5分/度</text>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">合同开始日期</text>
+      <picker mode="date" value="{{form.startDate}}" bindchange="onStartDateChange">
+        <view class="form-input picker">{{form.startDate || '请选择'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">合同结束日期</text>
+      <picker mode="date" value="{{form.endDate}}" bindchange="onEndDateChange">
+        <view class="form-input picker">{{form.endDate || '请选择'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">备注</text>
+      <input class="form-input" placeholder="选填" value="{{form.notes}}" data-field="notes" bindinput="onInput" />
+    </view>
+  </view>
+
+  <button class="submit-btn" bindtap="onSubmit" disabled="{{submitting}}">{{submitting ? '提交中...' : '提交合同'}}</button>
+</view>

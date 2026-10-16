@@ -1,0 +1,87 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/energy/energy",
+    "pages/analysis/analysis",
+    "pages/carbon/carbon",
+    "pages/profile/profile",
+    "pages/energy/add/add",
+    "pages/energy/history/history",
+    "pages/analysis/detail/detail",
+    "pages/vpp/vpp",
+    "pages/vpp/event/event",
+    "pages/vpp/earnings/earnings",
+    "pages/green/green",
+    "pages/green/add/add",
+    "pages/policy/policy",
+    "pages/alarm/alarm",
+    "pages/alarm-rules/alarm-rules",
+    "pages/control/control",
+    "pages/control/add/add",
+    "pages/profile/login/login",
+    "pages/privacy/privacy",
+    "pages/guide/guide",
+    "pages/quota/quota",
+    "pages/vpp/add/add",
+    "pages/vpp/settlement/settlement",
+    "pages/circuit-safety/circuit-safety",
+    "pages/wallet/wallet",
+    "pages/carbon-asset/carbon-asset",
+    "pages/partner/partner",
+    "pages/coordination/coordination",
+    "pages/billcheck/billcheck"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#07C160",
+    "navigationBarTitleText": "能耗翻译官",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#07C160",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/energy/energy",
+        "text": "录入",
+        "iconPath": "images/tabbar/energy.png",
+        "selectedIconPath": "images/tabbar/energy-active.png"
+      },
+      {
+        "pagePath": "pages/analysis/analysis",
+        "text": "分析",
+        "iconPath": "images/tabbar/analysis.png",
+        "selectedIconPath": "images/tabbar/analysis-active.png"
+      },
+      {
+        "pagePath": "pages/carbon/carbon",
+        "text": "碳报告",
+        "iconPath": "images/tabbar/carbon.png",
+        "selectedIconPath": "images/tabbar/carbon-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/tabbar/profile.png",
+        "selectedIconPath": "images/tabbar/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于获取您的位置信息以便提供更准确的能耗分析"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation"]
+}

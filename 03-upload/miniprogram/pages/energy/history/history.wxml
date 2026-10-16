@@ -1,0 +1,54 @@
+<view class="container">
+  <!-- 月份选择 -->
+  <view class="month-selector">
+    <view class="month-btn" bindtap="prevMonth">◀</view>
+    <text class="month-text">{{currentMonth}}</text>
+    <view class="month-btn" bindtap="nextMonth">▶</view>
+  </view>
+
+  <!-- 日历 -->
+  <view class="calendar-card">
+    <view class="week-header">
+      <text class="week-day" wx:for="{{weekDays}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="calendar-grid">
+      <view class="calendar-cell {{item.date === selectedDate ? 'selected' : ''}} {{dailyData[item.date] ? 'has-data' : ''}}"
+            wx:for="{{days}}" wx:key="date"
+            bindtap="onDayTap" data-date="{{item.date}}">
+        <text wx:if="{{item.day > 0}}">{{item.day}}</text>
+        <view class="data-dot" wx:if="{{dailyData[item.date]}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选中日期详情 -->
+  <view class="detail-card" wx:if="{{selectedDayData}}">
+    <view class="detail-title">{{selectedDate}} 能耗汇总</view>
+    <view class="detail-grid">
+      <view class="detail-item">
+        <text class="detail-value">{{selectedDayData.energy}}</text>
+        <text class="detail-label">总能耗(kWh)</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-value carbon">{{selectedDayData.carbon}}</text>
+        <text class="detail-label">碳排放(kg)</text>
+      </view>
+      <view class="detail-item">
+        <text class="detail-value cost">{{selectedDayData.cost}}</text>
+        <text class="detail-label">费用(元)</text>
+      </view>
+    </view>
+    <view class="detail-count">
+      <text>共 {{selectedDayData.count}} 条记录</text>
+    </view>
+  </view>
+
+  <view class="no-data" wx:elif="{{selectedDate && !selectedDayData}}">
+    <text>{{selectedDate}} 暂无记录</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

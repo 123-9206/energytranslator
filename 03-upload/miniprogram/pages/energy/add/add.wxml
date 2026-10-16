@@ -1,0 +1,47 @@
+<view class="container">
+  <view class="form-card">
+    <view class="form-title">添加能耗记录</view>
+
+    <!-- 日期选择 -->
+    <view class="form-group">
+      <text class="form-label">记录日期</text>
+      <picker mode="date" value="{{formData.recordDate}}" bindchange="onDateChange">
+        <view class="form-input picker">
+          <text>{{formData.recordDate || '请选择日期'}}</text>
+          <text class="picker-arrow">▶</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 能耗类型 -->
+    <view class="form-group">
+      <text class="form-label">能耗类型</text>
+      <picker mode="selector" range="{{types}}" range-key="label" value="{{typeIndex}}" bindchange="onTypeChange">
+        <view class="form-input picker">
+          <text>{{types[typeIndex].label}}</text>
+          <text class="picker-arrow">▶</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 数值输入 -->
+    <view class="form-group">
+      <text class="form-label">能耗数值</text>
+      <view class="input-wrap">
+        <input class="form-input" type="digit" placeholder="请输入数值" value="{{formData.value}}" bindinput="onValueInput" />
+        <text class="input-unit">{{formData.unit}}</text>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-group">
+      <text class="form-label">备注</text>
+      <textarea class="form-textarea" placeholder="可选，填写备注信息" value="{{formData.note}}" bindinput="onNoteInput" maxlength="200" auto-height></textarea>
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="onSubmit" disabled="{{submitting}}">
+      {{submitting ? '提交中...' : '提交记录'}}
+    </button>
+  </view>
+</view>

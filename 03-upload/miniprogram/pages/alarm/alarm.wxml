@@ -1,0 +1,47 @@
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <picker mode="selector" range="{{severities}}" range-key="label" value="{{severityIndex}}" bindchange="onSeverityChange">
+      <view class="picker-btn">
+        <text>{{severities[severityIndex].label}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading && alarms.length === 0}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 告警列表 -->
+  <view class="alarm-list" wx:if="{{!loading || alarms.length > 0}}">
+    <view class="alarm-item" wx:for="{{alarms}}" wx:key="id">
+      <view class="alarm-severity {{severityColors[item.severity]}}">
+        {{severityLabels[item.severity] || item.severity}}
+      </view>
+      <view class="alarm-content">
+        <text class="alarm-message">{{item.message || item.alarmContent}}</text>
+        <view class="alarm-meta">
+          <text class="alarm-device" wx:if="{{item.deviceName}}">{{item.deviceName}}</text>
+          <text class="alarm-time">{{item.createdAt || item.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{loading && alarms.length > 0}}">
+    <text>加载更多...</text>
+  </view>
+  <view class="load-more" wx:elif="{{noMore && alarms.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && alarms.length === 0}}">
+    <text class="empty-icon">🔔</text>
+    <text class="empty-text">暂无告警信息</text>
+    <text class="empty-hint">设备运行正常</text>
+  </view>
+</view>

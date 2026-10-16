@@ -1,0 +1,62 @@
+<view class="container">
+  <!-- 筛选栏 -->
+  <view class="filter-bar">
+    <picker mode="selector" range="{{types}}" range-key="label" bindchange="onTypeChange">
+      <view class="picker-item">
+        <text>{{currentTypeLabel}}</text>
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+    <picker mode="date" bindchange="onStartChange" value="{{filterStart}}">
+      <view class="picker-item date">
+        <text>{{filterStart || '开始日期'}}</text>
+      </view>
+    </picker>
+    <picker mode="date" bindchange="onEndChange" value="{{filterEnd}}">
+      <view class="picker-item date">
+        <text>{{filterEnd || '结束日期'}}</text>
+      </view>
+    </picker>
+    <view class="filter-btns">
+      <view class="btn-filter" bindtap="onFilter">筛选</view>
+      <view class="btn-reset" bindtap="onResetFilter">重置</view>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="record-list" wx:if="{{records.length > 0}}">
+    <view class="record-item" wx:for="{{records}}" wx:key="id">
+      <view class="record-icon {{item.type}}"></view>
+      <view class="record-content">
+        <view class="record-header">
+          <text class="record-type">{{typeLabels[item.type] || item.type}}</text>
+          <text class="record-date">{{item.displayDate}}</text>
+        </view>
+        <view class="record-body">
+          <text class="record-value">{{item.value}} {{item.unit || 'kWh'}}</text>
+          <text class="record-note" wx:if="{{item.note}}">{{item.note}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="load-more" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+  <view class="load-more" wx:elif="{{noMore && records.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && records.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">暂无能耗记录</text>
+    <text class="empty-hint">点击下方按钮添加记录</text>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="fab-btn" bindtap="goToAddRecord">
+    <text class="fab-icon">+</text>
+  </view>
+</view>

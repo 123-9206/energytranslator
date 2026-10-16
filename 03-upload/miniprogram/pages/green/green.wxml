@@ -1,0 +1,75 @@
+<view class="container">
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 绿电汇总卡片 -->
+  <view class="summary-section">
+    <view class="summary-title">🌱 绿电收益汇总</view>
+    <view class="summary-grid">
+      <view class="summary-item">
+        <text class="summary-value">{{summary.totalVolume || 0}}</text>
+        <text class="summary-label">合同绿电 (kWh)</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value green">{{summary.carbonOffset || 0}}</text>
+        <text class="summary-label">碳减排 (kg)</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value">{{summary.certificateCount || 0}}</text>
+        <text class="summary-label">绿证数量 (张)</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value orange">¥{{summary.estimatedSaving || 0}}</text>
+        <text class="summary-label">预估节约成本</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 合同列表 -->
+  <view class="section-header">
+    <text class="section-title">我的绿电合同</text>
+    <text class="section-action" bindtap="onAddContract">+ 新增合同</text>
+  </view>
+
+  <view class="contract-card" wx:for="{{contracts}}" wx:key="id">
+    <view class="contract-top">
+      <text class="contract-no">{{item.contractNo}}</text>
+      <text class="contract-status {{item.status}}">{{item.statusText}}</text>
+    </view>
+    <view class="contract-row">
+      <text class="contract-label">供应商</text>
+      <text class="contract-value">{{item.supplierName || '待填写'}}</text>
+    </view>
+    <view class="contract-row">
+      <text class="contract-label">合同电量</text>
+      <text class="contract-value">{{item.energyVolume}} kWh</text>
+    </view>
+    <view class="contract-row" wx:if="{{item.pricePremium}}">
+      <text class="contract-label">绿电溢价</text>
+      <text class="contract-value">¥{{item.pricePremium}} / kWh</text>
+    </view>
+    <view class="contract-row" wx:if="{{item.totalAmount}}">
+      <text class="contract-label">合同总额</text>
+      <text class="contract-value highlight">¥{{item.totalAmount}}</text>
+    </view>
+    <view class="contract-row" wx:if="{{item.actualVolume}}">
+      <text class="contract-label">已消纳</text>
+      <text class="contract-value green">{{item.actualVolume}} kWh（减排{{item.carbonOffset}}kg）</text>
+    </view>
+    <view class="contract-row" wx:if="{{item.certificateStatus}}">
+      <text class="contract-label">绿证</text>
+      <text class="contract-value">{{item.certificateCount}} 张 · {{item.certificateStatus === 'claimed' ? '已领取' : '未领取'}}</text>
+    </view>
+    <view class="contract-row time" wx:if="{{item.startDate}}">
+      <text class="contract-label">有效期</text>
+      <text class="contract-value">{{item.startDate}} ~ {{item.endDate}}</text>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{!loading && contracts.length === 0}}">
+    <text>暂无绿电合同，点击"新增合同"录入</text>
+  </view>
+
+  <button class="add-btn" bindtap="onAddContract" wx:if="{{contracts.length > 0}}">+ 新增绿电合同</button>
+</view>

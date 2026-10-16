@@ -1,0 +1,76 @@
+<view class="container">
+  <!-- 周期选择 -->
+  <view class="period-bar">
+    <view class="period-item {{period === item.value ? 'active' : ''}}"
+          wx:for="{{periods}}" wx:key="value"
+          bindtap="onPeriodChange" data-value="{{item.value}}">
+      <text>{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+    <!-- 碳排放核心数据 -->
+    <view class="carbon-hero">
+      <view class="hero-main">
+        <text class="hero-label">碳排放总量</text>
+        <view class="hero-value-wrap">
+          <text class="hero-value">{{report.totalCarbon}}</text>
+          <text class="hero-unit">kg CO₂</text>
+        </view>
+      </view>
+      <view class="hero-badge {{report.reductionRate >= 0 ? 'positive' : 'negative'}}">
+        <text>{{report.reductionRate >= 0 ? '↓' : '↑'}} {{report.reductionRate}}%</text>
+      </view>
+    </view>
+
+    <!-- 数据卡片 -->
+    <view class="stats-grid">
+      <view class="stat-card">
+        <text class="stat-icon green">🌿</text>
+        <text class="stat-value">{{report.carbonReduction}}</text>
+        <text class="stat-label">碳减排量(kg)</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-icon gold">💰</text>
+        <text class="stat-value">{{report.vppEarnings}}</text>
+        <text class="stat-label">VPP收益(元)</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-icon blue">📊</text>
+        <text class="stat-value">{{report.carbonCredits}}</text>
+        <text class="stat-label">碳信用额度</text>
+      </view>
+    </view>
+
+    <!-- 减排趋势 -->
+    <view class="trend-card">
+      <view class="card-title">碳排放趋势</view>
+      <view class="trend-bars" wx:if="{{trend.length > 0}}">
+        <view class="trend-bar-item" wx:for="{{trend}}" wx:key="date">
+          <view class="trend-bar" style="height: {{item.value / (maxTrend || 1) * 200}}rpx;"></view>
+          <text class="trend-label">{{item.label || item.date}}</text>
+        </view>
+      </view>
+      <view class="empty-tip" wx:else>
+        <text>暂无趋势数据</text>
+      </view>
+    </view>
+
+    <!-- 减排建议 -->
+    <view class="suggest-card">
+      <view class="card-title">碳减排建议</view>
+      <view class="suggest-list">
+        <view class="suggest-item" wx:for="{{suggestions}}" wx:key="index">
+          <view class="suggest-num">{{index + 1}}</view>
+          <text class="suggest-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

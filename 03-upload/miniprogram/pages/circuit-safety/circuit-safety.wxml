@@ -1,0 +1,76 @@
+<view class="container">
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+    <!-- KPI 概览 -->
+    <view class="kpi-row">
+      <view class="kpi-cell">
+        <text class="kpi-num">{{summary.deviceCount}}</text>
+        <text class="kpi-label">评估设备</text>
+      </view>
+      <view class="kpi-cell warning">
+        <text class="kpi-num">{{summary.warning}}</text>
+        <text class="kpi-label">需注意</text>
+      </view>
+      <view class="kpi-cell danger">
+        <text class="kpi-num">{{summary.danger}}</text>
+        <text class="kpi-label">危险</text>
+      </view>
+    </view>
+
+    <view class="section-title">设备安全状态</view>
+
+    <view class="empty-tip" wx:if="{{devices.length === 0}}">
+      <text>暂无已接入设备</text>
+    </view>
+
+    <view class="device-card" wx:for="{{devices}}" wx:key="deviceId">
+      <view class="device-head">
+        <view class="device-name-wrap">
+          <text class="device-name">{{item.deviceName}}</text>
+          <text class="device-state" wx:if="{{!item.available}}">离线</text>
+        </view>
+        <view class="level-badge {{item.levelClass}}">{{item.safetyLevel}}</view>
+      </view>
+
+      <view class="device-score">
+        <text class="score-num {{item.levelClass}}">{{item.safetyScore}}</text>
+        <text class="score-label">安全评分</text>
+      </view>
+
+      <view class="metric-grid">
+        <view class="metric-item">
+          <text class="metric-val">{{item.maxCurrent}}</text>
+          <text class="metric-key">最大电流(A)</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-val">{{item.avgVoltage}}</text>
+          <text class="metric-key">平均电压(V)</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-val">{{item.maxTemperature}}</text>
+          <text class="metric-key">最高温度(°C)</text>
+        </view>
+        <view class="metric-item">
+          <text class="metric-val">{{item.minPowerFactor}}</text>
+          <text class="metric-key">最低功率因数</text>
+        </view>
+      </view>
+
+      <view class="fault-block" wx:if="{{item.faultCount > 0}}">
+        <text class="fault-head">隐患 {{item.faultCount}} 项</text>
+        <view class="fault-item {{f.sevClass}}" wx:for="{{item.faults}}" wx:for-item="f" wx:key="type">
+          <text class="fault-type">· {{f.type}}</text>
+          <text class="fault-detail">{{f.detail}}</text>
+        </view>
+      </view>
+      <view class="fault-ok" wx:else>
+        <text>✓ 暂未发现明显隐患</text>
+      </view>
+    </view>
+  </block>
+</view>

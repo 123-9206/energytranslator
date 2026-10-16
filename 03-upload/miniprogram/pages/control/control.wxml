@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 顶部刷新 -->
+  <view class="refresh-bar">
+    <text class="device-count">设备列表 ({{devices.length}})</text>
+    <view class="refresh-btns">
+      <view class="add-device-btn" bindtap="onAddDevice">＋ 添加设备</view>
+      <view class="refresh-btn" bindtap="onRefresh">刷新</view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading-tip" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 设备列表 -->
+  <view class="device-list" wx:if="{{!loading}}">
+    <view class="device-card {{item.status === 'online' ? 'online' : 'offline'}}"
+          wx:for="{{devices}}" wx:key="id"
+          bindtap="onDeviceTap" data-id="{{item.id}}">
+      <view class="device-status-dot {{item.status}}"></view>
+      <view class="device-info">
+        <text class="device-name">{{item.name || '未命名设备'}}</text>
+        <text class="device-meta">{{item.type || '通用设备'}} | {{item.model || '-'}}</text>
+      </view>
+      <view class="device-data" wx:if="{{item.status === 'online'}}">
+        <text class="data-value">{{item.currentValue || item.power || '--'}}</text>
+        <text class="data-unit">{{item.unit || 'kW'}}</text>
+      </view>
+      <view class="device-status-text" wx:else>
+        离线
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{devices.length === 0}}">
+      <text class="empty-icon">📱</text>
+      <text class="empty-text">暂无设备</text>
+      <text class="empty-hint">点击上方"添加设备"录入设备</text>
+      <view class="empty-add-btn" bindtap="onAddDevice">＋ 添加设备</view>
+    </view>
+  </view>
+
+  <!-- 控制面板 -->
+  <view class="control-panel" wx:if="{{showControl && selectedDevice}}">
+    <view class="panel-header">
+      <text class="panel-title">{{selectedDevice.name}}</text>
+      <text class="panel-close" bindtap="onCloseControl">✕</text>
+    </view>
+    <view class="panel-body">
+      <!-- 开关控制 -->
+      <view class="control-row">
+        <text class="control-label">设备开关</text>
+        <switch checked="{{controlOn}}" bindchange="onToggleSwitch" color="#07C160"/>
+      </view>
+
+      <!-- 设备当前状态 -->
+      <view class="device-realtime" wx:if="{{selectedDevice.currentValue}}">
+        <view class="realtime-item">
+          <text class="rt-label">当前功率</text>
+          <text class="rt-value">{{selectedDevice.currentValue}} {{selectedDevice.unit || 'kW'}}</text>
+        </view>
+        <view class="realtime-item" wx:if="{{selectedDevice.energy}}">
+          <text class="rt-label">今日用电</text>
+          <text class="rt-value">{{selectedDevice.energy}} kWh</text>
+        </view>
+      </view>
+
+      <!-- 设定值 -->
+      <view class="control-row">
+        <text class="control-label">设定值</text>
+        <input class="control-input" type="digit" placeholder="输入设定值" value="{{controlValue}}" bindinput="onControlValueInput"/>
+      </view>
+    </view>
+    <view class="panel-footer">
+      <button class="send-btn" bindtap="onSendControl">发送指令</button>
+    </view>
+  </view>
+
+  <!-- 遮罩 -->
+  <view class="panel-mask" wx:if="{{showControl}}" bindtap="onCloseControl"></view>
+</view>

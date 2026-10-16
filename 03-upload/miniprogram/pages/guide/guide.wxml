@@ -1,0 +1,572 @@
+<view class="container">
+  <!-- 顶部 Tab -->
+  <view class="tab-bar">
+    <view 
+      class="tab-item {{activeTab === item.key ? 'active' : ''}}" 
+      wx:for="{{tabs}}" wx:key="key"
+      bindtap="switchTab" data-tab="{{item.key}}">
+      {{item.label}}
+    </view>
+  </view>
+
+  <!-- ==================== Tab1: Modbus TCP ==================== -->
+  <view class="tab-content" wx:if="{{activeTab === 'modbus'}}">
+    <view class="protocol-intro">
+      <view class="intro-icon">🔌</view>
+      <view class="intro-text">
+        <text class="intro-title">Modbus TCP 协议</text>
+        <text class="intro-desc">适合工业电表、PLC、电力仪表等设备。后端通过TCP连接主动轮询读取寄存器数据，适合局域网内设备。</text>
+      </view>
+    </view>
+
+    <!-- 架构说明 -->
+    <view class="card">
+      <view class="card-title">通信架构</view>
+      <view class="arch-flow">
+        <view class="arch-node server">后端服务器</view>
+        <view class="arch-arrow">→ TCP:502 轮询 →</view>
+        <view class="arch-node device">Modbus 设备</view>
+      </view>
+      <view class="arch-note">后端主动连接设备IP:502，读取保持寄存器数据，无需设备端做任何网络配置。</view>
+    </view>
+
+    <!-- 配置参数表 -->
+    <view class="card">
+      <view class="card-title">配置参数说明</view>
+      <view class="field-table">
+        <view class="field-row header">
+          <text class="col-name">参数名</text>
+          <text class="col-req">必填</text>
+          <text class="col-desc">说明</text>
+        </view>
+        <view class="field-row" wx:for="{{modbusFields}}" wx:key="name">
+          <text class="col-name">{{item.name}}</text>
+          <text class="col-req {{item.required ? 'required' : ''}}">{{item.required ? '是' : '否'}}</text>
+          <text class="col-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 创建示例 -->
+    <view class="card">
+      <view class="card-title">配置示例</view>
+      <view class="code-block">
+        <text>POST /api/devices</text>
+        <text>{{'{'}}</text>
+        <text>  "name": "1号车间电表",</text>
+        <text>  "type": "meter",</text>
+        <text>  "model": "DTSD341",</text>
+        <text>  "protocol": "modbus",</text>
+        <text>  "ipAddress": "192.168.1.100",</text>
+        <text>  "port": 502,</text>
+        <text>  "config": {{'{'}}</text>
+        <text>    "slaveId": 1,</text>
+        <text>    "energyAddress": 0,</text>
+        <text>    "powerAddress": 2,</text>
+        <text>    "dataType": "FLOAT",</text>
+        <text>    "intervalSeconds": 60</text>
+        <text>  {{'}'}}</text>
+        <text>{{'}'}}</text>
+      </view>
+    </view>
+
+    <!-- 步骤 -->
+    <view class="card">
+      <view class="card-title">操作步骤</view>
+      <view class="step-list">
+        <view class="step-item">1. 确保设备已接入局域网并配置好IP地址（如 192.168.1.x）</view>
+        <view class="step-item">2. 从设备说明书中找到 Modbus 通信地址表，记录能耗/功率的寄存器地址</view>
+        <view class="step-item">3. 在运营后台「设备管理」或通过API添加设备，选择协议为 modbus</view>
+        <view class="step-item">4. 填写设备IP、端口(502)、从站ID、寄存器地址等参数</view>
+        <view class="step-item">5. 保存后系统将在下次定时采集（默认60秒）时自动连接设备</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== Tab2: MQTT ==================== -->
+  <view class="tab-content" wx:if="{{activeTab === 'mqtt'}}">
+    <view class="protocol-intro">
+      <view class="intro-icon">📡</view>
+      <view class="intro-text">
+        <text class="intro-title">MQTT 协议</text>
+        <text class="intro-desc">适合IoT传感器、无线采集终端。设备主动发布数据到EMQX Broker，后端订阅对应Topic接收，实时性高。</text>
+      </view>
+    </view>
+
+    <!-- 架构说明 -->
+    <view class="card">
+      <view class="card-title">通信架构</view>
+      <view class="arch-flow mqtt-flow">
+        <view class="arch-node device">MQTT设备</view>
+        <view class="arch-arrow">→ 发布到 Topic →</view>
+        <view class="arch-node broker">EMQX Broker</view>
+        <view class="arch-arrow">→ 订阅推送 →</view>
+        <view class="arch-node server">后端服务器</view>
+      </view>
+      <view class="arch-note">设备需连接 EMQX Broker (example.com:1883)，按约定Topic格式发布JSON数据。</view>
+    </view>
+
+    <!-- 配置参数表 -->
+    <view class="card">
+      <view class="card-title">配置参数说明</view>
+      <view class="field-table">
+        <view class="field-row header">
+          <text class="col-name">参数名</text>
+          <text class="col-req">必填</text>
+          <text class="col-desc">说明</text>
+        </view>
+        <view class="field-row" wx:for="{{mqttFields}}" wx:key="name">
+          <text class="col-name">{{item.name}}</text>
+          <text class="col-req {{item.required ? 'required' : ''}}">{{item.required ? '是' : '否'}}</text>
+          <text class="col-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 数据格式 -->
+    <view class="card">
+      <view class="card-title">数据上报 Topic & 格式</view>
+      <view class="info-block">
+        <text class="info-label">Topic 格式:</text>
+        <text class="info-value copyable" bindtap="onCopy" data-text="energy/device/{deviceId}/data">energy/device/{{'{deviceId}'}}/data</text>
+      </view>
+      <view class="info-block">
+        <text class="info-label">数据格式 (JSON):</text>
+      </view>
+      <view class="code-block">
+        <text>{{'{'}}</text>
+        <text>  "value": 15.6,</text>
+        <text>  "energy": 230.5,</text>
+        <text>  "power": 15.6,</text>
+        <text>  "voltage": 220.1,</text>
+        <text>  "current": 71.2,</text>
+        <text>  "timestamp": "2026-05-26T17:00:00Z"</text>
+        <text>{{'}'}}</text>
+      </view>
+      <view class="info-note">必填字段：value（功率）和 energy（累计能耗）</view>
+    </view>
+
+    <!-- 连接配置 -->
+    <view class="card">
+      <view class="card-title">EMQX Broker 连接参数</view>
+      <view class="param-list">
+        <view class="param-item">
+          <text class="param-key">地址</text>
+          <text class="param-val">example.com</text>
+        </view>
+        <view class="param-item">
+          <text class="param-key">端口</text>
+          <text class="param-val">1883 (TCP)</text>
+        </view>
+        <view class="param-item">
+          <text class="param-key">认证</text>
+          <text class="param-val">需联系管理员获取用户名/密码</text>
+        </view>
+        <view class="param-item">
+          <text class="param-key">Client ID</text>
+          <text class="param-val">建议格式: energy_device_{设备编号}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 步骤 -->
+    <view class="card">
+      <view class="card-title">操作步骤</view>
+      <view class="step-list">
+        <view class="step-item">1. 配置你的MQTT设备/DTU连接参数（Broker地址、端口、认证信息）</view>
+        <view class="step-item">2. 设置设备数据上报的Topic为 energy/device/{{'{设备ID}'}}/data</view>
+        <view class="step-item">3. 在运营后台添加设备，协议选 mqtt，填写 controlTopic（控制用，可选）</view>
+        <view class="step-item">4. 设备上线并开始发布数据后，系统会自动接收并记录</view>
+        <view class="step-item">5. MQTT为被动接收模式，不需要配置采集间隔</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== Tab3: HTTP ==================== -->
+  <view class="tab-content" wx:if="{{activeTab === 'http'}}">
+    <view class="protocol-intro">
+      <view class="intro-icon">🌐</view>
+      <view class="intro-text">
+        <text class="intro-title">HTTP 协议</text>
+        <text class="intro-desc">适合具备REST API的智能设备（智能断路器、智能插座等）。后端定时GET/POST设备API获取数据，支持自定义认证头。</text>
+      </view>
+    </view>
+
+    <!-- 架构说明 -->
+    <view class="card">
+      <view class="card-title">通信架构</view>
+      <view class="arch-flow">
+        <view class="arch-node server">后端服务器</view>
+        <view class="arch-arrow">→ HTTP GET/POST →</view>
+        <view class="arch-node device">HTTP设备</view>
+      </view>
+      <view class="arch-note">后端定时向设备HTTP接口发起请求，解析JSON响应中的指定字段。</view>
+    </view>
+
+    <!-- 配置参数表 -->
+    <view class="card">
+      <view class="card-title">配置参数说明</view>
+      <view class="field-table">
+        <view class="field-row header">
+          <text class="col-name">参数名</text>
+          <text class="col-req">必填</text>
+          <text class="col-desc">说明</text>
+        </view>
+        <view class="field-row" wx:for="{{httpFields}}" wx:key="name">
+          <text class="col-name">{{item.name}}</text>
+          <text class="col-req {{item.required ? 'required' : ''}}">{{item.required ? '是' : '否'}}</text>
+          <text class="col-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- JSON 字段路径说明 -->
+    <view class="card">
+      <view class="card-title">JSON 字段路径配置说明</view>
+      <view class="info-block">
+        <text class="info-label">假设设备API返回:</text>
+      </view>
+      <view class="code-block">
+        <text>{{'{'}}</text>
+        <text>  "code": 200,</text>
+        <text>  "data": {{'{'}}</text>
+        <text>    "power": 15.6,</text>
+        <text>    "total_kwh": 230.5</text>
+        <text>  {{'}'}}</text>
+        <text>{{'}'}}</text>
+      </view>
+      <view class="info-block" style="margin-top: 20rpx;">
+        <text class="info-label">则应配置:</text>
+      </view>
+      <view class="param-list">
+        <view class="param-item">
+          <text class="param-key">energyField</text>
+          <text class="param-val">data.total_kwh</text>
+        </view>
+        <view class="param-item">
+          <text class="param-key">powerField</text>
+          <text class="param-val">data.power</text>
+        </view>
+      </view>
+      <view class="info-note">使用点号(.)分隔嵌套层级，系统会自动逐层提取。</view>
+    </view>
+
+    <!-- 创建示例 -->
+    <view class="card">
+      <view class="card-title">配置示例</view>
+      <view class="code-block">
+        <text>POST /api/devices</text>
+        <text>{{'{'}}</text>
+        <text>  "name": "智能断路器-01",</text>
+        <text>  "type": "controller",</text>
+        <text>  "protocol": "http",</text>
+        <text>  "ipAddress": "http://192.168.1.200",</text>
+        <text>  "port": 80,</text>
+        <text>  "config": {{'{'}}</text>
+        <text>    "dataPath": "/api/energy/current",</text>
+        <text>    "httpMethod": "GET",</text>
+        <text>    "energyField": "data.energy",</text>
+        <text>    "powerField": "data.power",</text>
+        <text>    "controlPath": "/api/control",</text>
+        <text>    "intervalSeconds": 30</text>
+        <text>  {{'}'}}</text>
+        <text>{{'}'}}</text>
+      </view>
+    </view>
+
+    <!-- 步骤 -->
+    <view class="card">
+      <view class="card-title">操作步骤</view>
+      <view class="step-list">
+        <view class="step-item">1. 确认设备的HTTP API可正常访问（用浏览器或curl测试）</view>
+        <view class="step-item">2. 记录数据接口路径、请求方法、响应JSON结构</view>
+        <view class="step-item">3. 如有认证要求，准备 Authorization 头的值</view>
+        <view class="step-item">4. 在运营后台添加设备，协议选 http，填写所有参数</view>
+        <view class="step-item">5. 保存后系统按采集间隔定时拉取数据</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== Tab4: 多电源接入 & VPP ==================== -->
+  <view class="tab-content" wx:if="{{activeTab === 'powersource'}}">
+    <view class="protocol-intro">
+      <view class="intro-icon">🏭</view>
+      <view class="intro-text">
+        <text class="intro-title">多电源渠道接入 & VPP</text>
+        <text class="intro-desc">光伏、储能、风电、柴油发电等电源设备均可通过 Modbus TCP 协议接入，并注册为虚拟电厂(VPP)资源参与调峰交易。</text>
+      </view>
+    </view>
+
+    <!-- VPP 资源类型总览 -->
+    <view class="card">
+      <view class="card-title">VPP 可注册资源类型</view>
+      <view class="vpp-type-card" wx:for="{{vppSourceTypes}}" wx:key="type">
+        <view class="vpp-type-header">
+          <text class="vpp-type-icon">{{item.icon}}</text>
+          <view class="vpp-type-info">
+            <text class="vpp-type-name">{{item.name}}</text>
+            <text class="vpp-type-desc">{{item.desc}}</text>
+          </view>
+        </view>
+        <view class="vpp-type-detail">
+          <view class="vpp-detail-row">
+            <text class="vpp-detail-label">VPP 关键字段</text>
+            <text class="vpp-detail-value">{{item.fields}}</text>
+          </view>
+          <view class="vpp-detail-row">
+            <text class="vpp-detail-label">通信协议</text>
+            <text class="vpp-detail-value">{{item.protocol}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 光伏逆变器详细配置 -->
+    <view class="card">
+      <view class="card-title">☀️ 光伏逆变器 - Modbus 寄存器配置</view>
+      <view class="field-table">
+        <view class="field-row header">
+          <text class="col-name">参数名</text>
+          <text class="col-req">必填</text>
+          <text class="col-desc">说明</text>
+        </view>
+        <view class="field-row" wx:for="{{solarFields}}" wx:key="name">
+          <text class="col-name">{{item.name}}</text>
+          <text class="col-req {{item.required ? 'required' : ''}}">{{item.required ? '是' : '否'}}</text>
+          <text class="col-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 逆变器品牌 -->
+    <view class="card">
+      <view class="card-title">推荐逆变器品牌</view>
+      <view class="brand-list">
+        <view class="brand-item" wx:for="{{solarBrands}}" wx:key="brand">
+          <text class="brand-name">{{item.brand}}</text>
+          <text class="brand-models">{{item.models}}</text>
+          <text class="brand-note">{{item.note}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 储能柜详细配置 -->
+    <view class="card">
+      <view class="card-title">🔋 储能柜 BMS - Modbus 寄存器配置</view>
+      <view class="field-table">
+        <view class="field-row header">
+          <text class="col-name">参数名</text>
+          <text class="col-req">必填</text>
+          <text class="col-desc">说明</text>
+        </view>
+        <view class="field-row" wx:for="{{storageFields}}" wx:key="name">
+          <text class="col-name">{{item.name}}</text>
+          <text class="col-req {{item.required ? 'required' : ''}}">{{item.required ? '是' : '否'}}</text>
+          <text class="col-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 储能品牌 -->
+    <view class="card">
+      <view class="card-title">推荐储能品牌</view>
+      <view class="brand-list">
+        <view class="brand-item" wx:for="{{storageBrands}}" wx:key="brand">
+          <text class="brand-name">{{item.brand}}</text>
+          <text class="brand-models">{{item.models}}</text>
+          <text class="brand-note">{{item.note}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- VPP 注册流程 -->
+    <view class="card">
+      <view class="card-title">VPP 注册流程</view>
+      <view class="vpp-step-list">
+        <view class="vpp-step-item" wx:for="{{vppSteps}}" wx:key="step">
+          <view class="vpp-step-num">{{item.step}}</view>
+          <view class="vpp-step-content">
+            <text class="vpp-step-title">{{item.title}}</text>
+            <text class="vpp-step-desc">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 设备创建 JSON 示例 -->
+    <view class="card">
+      <view class="card-title">设备创建示例 - 光伏逆变器</view>
+      <view class="code-block">
+        <text>POST /api/devices</text>
+        <text>{{'{'}}</text>
+        <text>  "name": "厂房屋顶光伏-华为SUN2000",</text>
+        <text>  "type": "inverter",</text>
+        <text>  "model": "SUN2000-20KTL-M3",</text>
+        <text>  "protocol": "modbus",</text>
+        <text>  "ipAddress": "192.168.10.50",</text>
+        <text>  "port": 502,</text>
+        <text>  "config": {{'{'}}</text>
+        <text>    "slaveId": 1,</text>
+        <text>    "powerAddress": 32064,</text>
+        <text>    "dailyEnergy": 32114,</text>
+        <text>    "totalEnergy": 32106,</text>
+        <text>    "dataType": "UINT32",</text>
+        <text>    "intervalSeconds": 60</text>
+        <text>  {{'}'}}</text>
+        <text>{{'}'}}</text>
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">设备创建示例 - 储能柜</view>
+      <view class="code-block">
+        <text>POST /api/devices</text>
+        <text>{{'{'}}</text>
+        <text>  "name": "1号储能柜-宁德时代",</text>
+        <text>  "type": "storage_cabinet",</text>
+        <text>  "model": "EnerOne",</text>
+        <text>  "protocol": "modbus",</text>
+        <text>  "ipAddress": "192.168.10.60",</text>
+        <text>  "port": 502,</text>
+        <text>  "config": {{'{'}}</text>
+        <text>    "slaveId": 1,</text>
+        <text>    "socAddress": 1000,</text>
+        <text>    "chargePower": 1002,</text>
+        <text>    "totalCapacity": 1004,</text>
+        <text>    "dataType": "UINT16",</text>
+        <text>    "intervalSeconds": 30</text>
+        <text>  {{'}'}}</text>
+        <text>{{'}'}}</text>
+      </view>
+    </view>
+
+    <!-- 人员技能评估 -->
+    <view class="card">
+      <view class="card-title">👨‍🔧 连接操作 - 人员技能评估</view>
+      
+      <view class="skill-section">
+        <text class="skill-label">方案A：自行操作（推荐）</text>
+        <view class="step-list">
+          <view class="step-item"><text class="bold">适用条件：</text>具备基本网络知识（IP配置、局域网接入）的生产或IT人员即可。</view>
+          <view class="step-item"><text class="bold">核心技能：</text></view>
+          <view class="step-item">  ① 能通过浏览器访问设备管理后台（与配置路由器难度相当）</view>
+          <view class="step-item">  ② 会看设备说明书中的 Modbus 通信地址表（会对照表格即可）</view>
+          <view class="step-item">  ③ 能在小程序中填写参数表单（与填Excel一样简单）</view>
+          <view class="step-item"><text class="bold">工作量：</text>单台设备首次配置约 30-60 分钟，同型号批量配置 5 分钟/台。</view>
+          <view class="step-item"><text class="bold">不需要：</text>编程能力、数据库操作、Linux命令行。所有配置均通过小程序 Web 界面完成。</view>
+        </view>
+      </view>
+
+      <view class="skill-divider"></view>
+
+      <view class="skill-section">
+        <text class="skill-label">方案B：委托设备供应商</text>
+        <view class="step-list">
+          <view class="step-item">逆变器/储能柜/DTU 品牌商通常提供 <text class="bold">免费的上门调试服务</text>（含通信配置）。</view>
+          <view class="step-item">采购时明确提出"需要对接第三方能耗管理平台，协议为 Modbus TCP/MQTT"，供应商工程师会现场完成配置。</view>
+          <view class="step-item">华为/阳光电源/宁德时代等大品牌均有标准化的并网调试流程，属于售前/售后服务内容。</view>
+        </view>
+      </view>
+
+      <view class="skill-divider"></view>
+
+      <view class="skill-section">
+        <text class="skill-label">方案C：招聘专职人员（仅在以下情况需要）</text>
+        <view class="step-list">
+          <view class="step-item">① 设备数量超过 20 台且持续扩展</view>
+          <view class="step-item">② 需要日常运维、故障排查、数据质量巡检</view>
+          <view class="step-item">③ 同时管理多个厂区的能耗系统</view>
+          <view class="step-item"><text class="bold">岗位建议：</text>「能源管理工程师」或「IoT运维工程师」，月薪 8-15K（江浙沪水平），要求：了解 Modbus TCP/MQTT、会看寄存器地址表、有现场调试经验。</view>
+        </view>
+      </view>
+
+      <view class="skill-divider"></view>
+
+      <view class="skill-conclusion">
+        <text class="conclusion-icon">💡</text>
+        <text class="conclusion-text"><text class="bold">结论：不需要专门招聘。</text>对于中小规模工厂（10-20台设备以内），现有生产或IT人员完全可以通过本指南自助完成设备接入。大品牌设备供应商提供免费调试服务，且系统所有配置均为 Web 表单操作，零编程门槛。</text>
+      </view>
+    </view>
+
+    <!-- 多电源专属常见问题 -->
+    <view class="card faq-section">
+      <view class="card-title">常见问题 - 多电源接入</view>
+      <view class="faq-item">
+        <view class="faq-q">光伏和储能可以用现有的 Modbus 设备接口吗？</view>
+        <view class="faq-a">完全可以。逆变器和储能柜 BMS 都通过 Modbus TCP 通信，与普通电表使用相同的设备管理接口。创建设备时选择对应的 type（inverter 或 storage_cabinet），填写对应的寄存器地址即可。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">VPP 资源必须关联物理设备吗？</view>
+        <view class="faq-a">是的。VPP 资源的实时功率、SOC、发电量等数据都来自关联的设备采集数据。必须先完成设备接入和数据采集验证，才能注册为 VPP 资源。设备离线时，对应 VPP 资源也会自动标记为不可调度状态。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">一个企业可以注册多少个 VPP 资源？</view>
+        <view class="faq-a">系统默认上限为 50 个/企业。6 种资源类型（光伏、储能、风电、柴油发电、电网关口、可调负荷）均计入配额。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">光伏逆变器的寄存器地址怎么获取？</view>
+        <view class="faq-a">华为/阳光电源/固德威等品牌公开了 Modbus 通信协议文档和 SunSpec 寄存器映射表。可在厂商官网技术支持页面下载。推荐使用 SunSpec 标准映射（与品牌无关的通用寄存器布局）。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">储能柜采集间隔设多少合适？</view>
+        <view class="faq-a">建议 30 秒。如果参与 VPP 快速调频辅助服务，可降至 10-15 秒。</view>
+      </view>
+      <view class="faq-item">
+        <view class="faq-q">柴油发电机/风电也要接入吗？</view>
+        <view class="faq-a">取决于交易策略。如果只参与光伏+储能的调峰，可不接。如想参与紧急备用容量市场或多元绿色电力组合交易，建议全部接入。</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== Tab5: 采购指南 ==================== -->
+  <view class="tab-content" wx:if="{{activeTab === 'shop'}}">
+    <view class="protocol-intro">
+      <view class="intro-icon">🛒</view>
+      <view class="intro-text">
+        <text class="intro-title">设备采购指南</text>
+        <text class="intro-desc">以下为各协议推荐的设备品牌及采购渠道，所有设备均经过兼容性验证，可直接接入能耗翻译官系统。</text>
+      </view>
+    </view>
+
+    <view class="shop-category" wx:for="{{shopCategories}}" wx:key="title">
+      <view class="shop-cat-title">
+        <text class="cat-icon">{{item.icon}}</text>
+        <text class="cat-label">{{item.title}}</text>
+      </view>
+      <view class="shop-item" wx:for="{{item.items}}" wx:key="brand" wx:for-item="product">
+        <view class="shop-item-header">
+          <text class="shop-brand">{{product.brand}}</text>
+          <text class="shop-price">{{product.price}}</text>
+        </view>
+        <text class="shop-model">型号: {{product.models}}</text>
+        <text class="shop-desc">{{product.desc}}</text>
+        <text class="shop-channel">🛒 {{product.channel}}</text>
+      </view>
+    </view>
+
+    <!-- 采购建议 -->
+    <view class="card">
+      <view class="card-title">💡 采购建议</view>
+      <view class="step-list">
+        <view class="step-item"><text class="bold">单点试点:</text> 先采购1-2台设备验证通信和配置流程，推荐选择 Modbus TCP 电表（技术最成熟）</view>
+        <view class="step-item"><text class="bold">批量部署:</text> 通过 1688 批量采购，单价可降低 20-40%</view>
+        <view class="step-item"><text class="bold">兼容性优先:</text> 务必确认设备说明书明确标注支持 Modbus TCP（不是 RTU）或 MQTT 3.1.1+</view>
+        <view class="step-item"><text class="bold">辅材别忘:</text> 电流互感器、工业交换机、DIN导轨电源需与设备一并采购</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==================== 常见问题 (除采购外所有Tab都显示) ==================== -->
+  <view class="card faq-section" wx:if="{{activeTab !== 'shop' && activeTab !== 'powersource'}}">
+    <view class="card-title">常见问题</view>
+    <view class="faq-item" wx:for="{{faq}}" wx:key="q">
+      <view class="faq-q">{{item.q}}</view>
+      <view class="faq-a">{{item.a}}</view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="footer-tip">
+    <text>如需更多帮助，请联系系统管理员</text>
+  </view>
+</view>

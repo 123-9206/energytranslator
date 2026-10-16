@@ -1,0 +1,119 @@
+.container {
+  padding-bottom: 40rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.filter-bar {
+  display: flex;
+  padding: 20rpx 24rpx;
+  background: #fff;
+}
+
+.picker-btn {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 24rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.picker-btn .arrow {
+  font-size: 18rpx;
+  color: #999;
+  margin-left: 8rpx;
+}
+
+.loading-tip {
+  text-align: center;
+  padding: 200rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.alarm-list {
+  padding: 16rpx 24rpx;
+}
+
+.alarm-item {
+  display: flex;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.alarm-severity {
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  font-weight: 500;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  height: fit-content;
+}
+
+.alarm-severity.red { background: rgba(250, 81, 81, 0.12); color: #fa5151; }
+.alarm-severity.orange { background: rgba(255, 152, 0, 0.12); color: #ff9800; }
+.alarm-severity.blue { background: rgba(0, 122, 255, 0.12); color: #007aff; }
+
+.alarm-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.alarm-message {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+}
+
+.alarm-meta {
+  display: flex;
+  justify-content: space-between;
+}
+
+.alarm-device {
+  font-size: 24rpx;
+  color: #07C160;
+}
+
+.alarm-time {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.load-more {
+  text-align: center;
+  padding: 24rpx 0;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 200rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: #999;
+}
+
+.empty-hint {
+  font-size: 24rpx;
+  color: #ccc;
+  margin-top: 12rpx;
+}

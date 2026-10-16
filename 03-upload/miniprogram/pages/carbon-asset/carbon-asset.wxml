@@ -1,0 +1,49 @@
+<view class="container">
+  <view class="loading-tip" wx:if="{{loading}}">
+    <view class="spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:if="{{!loading}}">
+    <!-- 盈余 hero -->
+    <view class="hero-card {{asset.statusClass}}">
+      <text class="hero-label">碳资产{{asset.status}}</text>
+      <view class="hero-value">
+        <text class="hero-sign">{{asset.surplusSign}}</text>
+        <text class="hero-num">{{asset.surplus}}</text>
+        <text class="hero-unit">tCO₂</text>
+      </view>
+      <text class="hero-sub">{{asset.status === '超排' ? '当前排放已超过核定配额，建议购买碳汇或实施减排' : '配额覆盖排放，状态良好'}}</text>
+    </view>
+
+    <!-- 单位提示 -->
+    <view class="warn-card" wx:if="{{asset.unitNote}}">
+      <text class="warn-icon">⚠️</text>
+      <text class="warn-text">{{asset.unitNote}}</text>
+    </view>
+
+    <!-- 明细 -->
+    <view class="grid">
+      <view class="grid-item">
+        <text class="g-val">{{asset.allocatedQuota}}</text>
+        <text class="g-label">核定配额(tCO₂)</text>
+      </view>
+      <view class="grid-item">
+        <text class="g-val">{{asset.purchasedQuota}}</text>
+        <text class="g-label">已购碳汇(tCO₂)</text>
+      </view>
+      <view class="grid-item">
+        <text class="g-val">{{asset.actualEmission}}</text>
+        <text class="g-label">实际排放(tCO₂)</text>
+      </view>
+      <view class="grid-item">
+        <text class="g-val status-{{asset.statusClass}}">{{asset.status}}</text>
+        <text class="g-label">状态(阈值{{asset.alertThreshold}}%)</text>
+      </view>
+    </view>
+
+    <view class="tip-card">
+      <text class="tip-text">碳配额与碳汇管理详见「碳配额」页；绿电与碳核算路径见「绿电中心」。</text>
+    </view>
+  </block>
+</view>

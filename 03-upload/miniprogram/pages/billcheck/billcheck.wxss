@@ -1,0 +1,86 @@
+.page { background: #f5f6f8; min-height: 100vh; padding: 24rpx 24rpx 80rpx; box-sizing: border-box; }
+
+.hero {
+  background: linear-gradient(135deg, #0d5c46, #12805f);
+  border-radius: 20rpx;
+  padding: 36rpx 30rpx;
+  margin-bottom: 24rpx;
+  color: #fff;
+}
+.hero-title { font-size: 40rpx; font-weight: 600; margin-bottom: 12rpx; }
+.hero-desc { font-size: 26rpx; opacity: 0.92; line-height: 1.6; }
+
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+.card-title { font-size: 30rpx; font-weight: 600; margin-bottom: 20rpx; }
+
+.upload-box {
+  border: 3rpx dashed #c8d6d0;
+  border-radius: 16rpx;
+  padding: 40rpx 20rpx;
+  text-align: center;
+  background: #fbfdfc;
+}
+.upload-hint { color: #12805f; font-size: 26rpx; line-height: 1.7; white-space: pre-line; }
+.preview { width: 100%; border-radius: 12rpx; }
+
+.label { font-size: 24rpx; color: #666; margin: 20rpx 0 10rpx; }
+.input {
+  border: 2rpx solid #ddd;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  font-size: 28rpx;
+  background: #fff;
+}
+
+.btn {
+  margin-top: 28rpx;
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  padding: 8rpx 0;
+}
+.btn.primary { background: #12805f; color: #fff; }
+.btn.primary[disabled] { background: #9cc3b6; }
+.btn.secondary { background: #fff; color: #12805f; border: 2rpx solid #12805f; }
+.btn.secondary[disabled] { color: #9cc3b6; border-color: #9cc3b6; }
+
+.msg { font-size: 24rpx; margin-top: 16rpx; line-height: 1.6; }
+.msg.error { color: #c0392b; }
+.msg.ok { color: #12805f; }
+
+.ticket {
+  background: #fff8e6;
+  border: 2rpx solid #f0dfae;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 20rpx;
+}
+.ticket-title { font-size: 26rpx; color: #a5731b; font-weight: 600; }
+.ticket-id { font-size: 24rpx; word-break: break-all; margin: 10rpx 0; color: #333; }
+.ticket-note { font-size: 24rpx; color: #888; line-height: 1.6; }
+
+.report {
+  margin-top: 20rpx;
+  background: #fbfdfc;
+  border: 2rpx solid #e3ece8;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  font-size: 26rpx;
+  line-height: 1.8;
+  max-height: 700rpx;
+  white-space: pre-wrap;
+}
+
+.footnote {
+  font-size: 22rpx;
+  color: #999;
+  text-align: center;
+  margin-top: 30rpx;
+  line-height: 1.7;
+  white-space: pre-line;
+}

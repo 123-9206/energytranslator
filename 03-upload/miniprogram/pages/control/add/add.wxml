@@ -1,0 +1,68 @@
+<view class="container">
+  <!-- AI 智能分析能力说明 -->
+  <view class="ai-banner">
+    <view class="ai-banner-icon">🤖</view>
+    <view class="ai-banner-text">
+      <text class="ai-banner-title">AI 智能监测 · 节能省钱</text>
+      <text class="ai-banner-desc">设备接入后，AI 将自动识别用电行为、分析能耗异常并智能调控，帮助高效节能</text>
+    </view>
+  </view>
+
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label required">设备名称</text>
+      <input class="form-input" placeholder="如：车间LED照明系统" value="{{name}}" bindinput="onNameInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">设备类型</text>
+      <picker mode="selector" range="{{types}}" bindchange="onTypeChange">
+        <view class="picker-value {{type ? '' : 'placeholder'}}">
+          <text>{{type || '请选择设备类型'}}</text>
+          <text class="arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">通讯协议</text>
+      <picker mode="selector" range="{{protocols}}" range-key="label" bindchange="onProtocolChange">
+        <view class="picker-value">
+          <text>{{protocols[protocolIndex].label}}</text>
+          <text class="arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label required">安装位置</text>
+      <input class="form-input" placeholder="如：1号厂房 / 制冷站" value="{{siteId}}" bindinput="onSiteInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">IP地址</text>
+      <input class="form-input" placeholder="如：192.168.1.105" value="{{ipAddress}}" bindinput="onIpInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">端口</text>
+      <input class="form-input" type="number" placeholder="如：1883 / 502" value="{{port}}" bindinput="onPortInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">设备型号</text>
+      <input class="form-input" placeholder="选填，如：LED-J100W" value="{{model}}" bindinput="onModelInput"/>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">制造商</text>
+      <input class="form-input" placeholder="选填" value="{{manufacturer}}" bindinput="onManufacturerInput"/>
+    </view>
+  </view>
+
+  <view class="tip-text">提示：可添加厂房内任意电力设备（总进线、分路、生产设备、空调、储能柜、照明等）。添加后设备默认为离线状态，接入网络并上报数据后，AI 即开始实时监测与分析。</view>
+
+  <button class="submit-btn" bindtap="onSubmit" disabled="{{submitting}}">
+    {{submitting ? '提交中...' : '保存设备'}}
+  </button>
+</view>
